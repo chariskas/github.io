@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light dark">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Πλειστηριασμοί Κύπρου — Cyprus Property Auctions</title>
+<meta name="description" content="Όλοι οι επερχόμενοι πλειστηριασμοί ακινήτων στην Κύπρο σε μία σελίδα. All upcoming Cyprus property auctions on one page. Ενημερώνεται καθημερινά / Updated daily.">
+<meta name="keywords" content="πλειστηριασμοί Κύπρου, πλειστηριασμοί ακινήτων, eauction Κύπρος, property auctions Cyprus, foreclosure Cyprus, τραπεζικά ακίνητα, πλειστηριασμοί Πάφος, πλειστηριασμοί Λεμεσός, bank owned property Cyprus">
+<meta name="author" content="Cyprus Auctions">
+<meta name="theme-color" content="#123B5D">
+<meta property="og:title" content="Πλειστηριασμοί Κύπρου — Cyprus Property Auctions">
+<meta property="og:description" content="Όλοι οι επερχόμενοι πλειστηριασμοί ακινήτων της Κύπρου με φίλτρα, τιμές, AI εκτίμηση και σήμανση μειώσεων. Ενημερώνεται καθημερινά.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="og-image.png">
+<meta property="og:site_name" content="Cyprus Auctions">
+<meta property="og:locale" content="el_GR">
+<meta property="og:locale:alternate" content="en_GB">
+<meta property="og:locale:alternate" content="ru_RU">
+<meta property="og:locale:alternate" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Πλειστηριασμοί Κύπρου — Cyprus Property Auctions">
+<meta name="twitter:description" content="Όλοι οι πλειστηριασμοί ακινήτων της Κύπρου με AI εκτίμηση και ειδοποιήσεις. Ενημερώνεται καθημερινά.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<!--HREFLANG--><!--/HREFLANG-->
+<!--LD--><!--/LD-->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Hebrew:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#081C2E; --navy2:#0F2942; --blue:#2563EB; --blue-soft:#EEF3FF;
+    --emerald:#00B67A; --emerald-soft:#E4F7F0; --gold:#D4AF37;
+    --bg:#F5F7FA; --card:#FFFFFF; --ink:#111827;
+    --muted:#6B7280; --line:#E8ECF1; --warn:#F59E0B; --danger:#EF4444;
+    --success:#00B67A;
+    --serif:'Manrope','Inter',system-ui,sans-serif;
+    --display:'Manrope','Inter',system-ui,sans-serif;
+    --sans:'Inter','Noto Sans Hebrew',system-ui,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --shadow-sm:0 1px 2px rgba(8,28,46,.04),0 1px 3px rgba(8,28,46,.05);
+    --shadow-md:0 4px 12px -2px rgba(8,28,46,.06),0 12px 28px -6px rgba(8,28,46,.10);
+    --shadow-lg:0 24px 60px -16px rgba(8,28,46,.28);
+    --shadow-xl:0 32px 80px -20px rgba(8,28,46,.35);
+    --glass:rgba(255,255,255,.72);
+    --r:22px; --r-sm:14px; --r-lg:28px;
+    --ease:cubic-bezier(.2,.8,.2,1);
+  }
+  html[data-theme=dark]{
+    --navy:#0A1B2A; --navy2:#0F2942; --bg:#050608; --card:#111827;
+    --ink:#F3F4F6; --muted:#9AA6B4; --line:#1E2A3A; --blue-soft:#13233F;
+    --emerald-soft:#0D2A22; --glass:rgba(17,24,39,.72);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.3);
+    --shadow-md:0 4px 12px -2px rgba(0,0,0,.4),0 12px 28px -6px rgba(0,0,0,.5);
+    --shadow-lg:0 24px 60px -16px rgba(0,0,0,.6);
+    --shadow-xl:0 32px 80px -20px rgba(0,0,0,.7);
+    --glass:rgba(17,24,39,.72);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{background:var(--bg)!important;color:var(--ink)!important;font-family:var(--sans);
+    font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+  a{color:inherit}
+
+  /* ---------- NAV ---------- */
+  .nav{position:sticky;top:0;z-index:30;background:var(--glass);
+    backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--line)}
+  .nav .row{display:flex;align-items:center;gap:18px;height:68px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:800;
+    font-size:18px;letter-spacing:-.03em;color:var(--navy);text-decoration:none;white-space:nowrap}
+  .brand .mark{width:32px;height:32px;border-radius:10px;
+    background:linear-gradient(135deg,var(--navy),var(--blue));display:grid;
+    place-items:center;color:#fff;font-size:15px;font-weight:800;
+    box-shadow:0 4px 12px -2px rgba(37,99,235,.4);position:relative;overflow:hidden}
+  .brand .mark::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg,transparent 40%,rgba(212,175,55,.35) 100%)}
+  .nav .spacer{flex:1}
+  .nav a.link{font-size:14px;font-weight:600;color:var(--muted);text-decoration:none;
+    white-space:nowrap;transition:color .2s var(--ease)}
+  .nav a.link:hover{color:var(--navy)}
+  @media(max-width:760px){.nav a.link{display:none}}
+  .langs{display:flex;gap:2px;background:var(--blue-soft);border-radius:99px;padding:3px}
+  .langs button{font:inherit;font-size:12px;font-weight:700;cursor:pointer;background:none;
+    border:none;border-radius:99px;padding:5px 10px;color:var(--muted);transition:all .2s var(--ease)}
+  .langs button[aria-current=true]{background:var(--card);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .theme-btn{width:34px;height:34px;border-radius:99px;border:1px solid var(--line);
+    background:var(--card);cursor:pointer;display:grid;place-items:center;font-size:15px;
+    transition:all .2s var(--ease);color:var(--muted)}
+  .theme-btn:hover{color:var(--navy);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;overflow:hidden;
+    background:linear-gradient(150deg,#050E18 0%,#081C2E 40%,#0F2942 78%,#12355A 100%)}
+  .hero::before{content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(820px 420px at 78% -12%,rgba(37,99,235,.55),transparent 62%),
+      radial-gradient(640px 380px at 6% 112%,rgba(0,182,122,.36),transparent 58%),
+      radial-gradient(480px 300px at 92% 90%,rgba(212,175,55,.14),transparent 60%);
+    animation:heroGlow 14s ease-in-out infinite alternate}
+  @keyframes heroGlow{0%{opacity:.75;transform:scale(1)}100%{opacity:1;transform:scale(1.06)}}
+  .hero::after{content:"";position:absolute;inset:0;opacity:.1;
+    background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+    background-size:52px 52px;mask-image:linear-gradient(180deg,#000,transparent 80%)}
+  .hero .wrap{position:relative;z-index:1;padding:96px 24px 140px;text-align:center}
+  .hero .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;
+    font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#CFE0F7;
+    background:rgba(255,255,255,.06);backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.14);border-radius:99px;padding:8px 16px;margin-bottom:28px;
+    animation:fadeUp .7s var(--ease) both}
+  .hero .eyebrow .pulse{width:7px;height:7px;border-radius:99px;background:var(--emerald);
+    box-shadow:0 0 0 0 rgba(0,182,122,.6);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,182,122,.55)}
+    70%{box-shadow:0 0 0 10px rgba(0,182,122,0)}100%{box-shadow:0 0 0 0 rgba(0,182,122,0)}}
+  .hero h1{font-family:var(--display);font-size:clamp(38px,6vw,68px);font-weight:800;
+    line-height:1.02;letter-spacing:-.04em;color:#fff;max-width:15ch;margin:0 auto;
+    animation:fadeUp .8s var(--ease) .05s both}
+  .hero h1 .grad{background:linear-gradient(120deg,#fff 30%,#8FC5FF 70%,#D4AF37 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero .sub{color:#C4D6EC;font-size:clamp(16px,2vw,20px);margin:24px auto 0;
+    max-width:54ch;line-height:1.55;animation:fadeUp .8s var(--ease) .12s both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+  /* search bar — Airbnb style */
+  .searchbar{position:relative;z-index:2;max-width:880px;margin:-64px auto 0;
+    background:var(--card);border-radius:99px;box-shadow:var(--shadow-xl);
+    padding:10px 10px 10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+    border:1px solid var(--line);animation:fadeUp .8s var(--ease) .2s both}
+  @media(max-width:600px){.searchbar{border-radius:var(--r);padding:12px}}
+  .searchbar .field{flex:1;min-width:200px;display:flex;align-items:center;gap:12px;padding:8px 12px}
+  .searchbar svg{width:20px;height:20px;color:var(--muted);flex-shrink:0}
+  .searchbar input{border:none;outline:none;font:inherit;font-size:16px;width:100%;
+    background:none;color:var(--ink)}
+  .searchbar .go{background:linear-gradient(135deg,var(--blue),#1E4FD8);color:#fff;border:none;
+    border-radius:99px;font:inherit;font-weight:700;font-size:15px;padding:15px 30px;cursor:pointer;
+    transition:transform .18s var(--ease),box-shadow .2s;white-space:nowrap;
+    box-shadow:0 8px 20px -6px rgba(37,99,235,.5)}
+  .searchbar .go:hover{transform:translateY(-2px);box-shadow:0 14px 30px -8px rgba(37,99,235,.6)}
+  .alert-cta{display:inline-flex;align-items:center;gap:8px;margin:22px auto 0;
+    font:inherit;font-size:14.5px;font-weight:700;cursor:pointer;
+    background:linear-gradient(135deg,var(--emerald),#00A06C);color:#fff;border:none;
+    border-radius:99px;padding:13px 26px;box-shadow:0 8px 22px -5px rgba(0,182,122,.5);
+    transition:transform .18s var(--ease),box-shadow .2s;position:relative;z-index:1}
+  .alert-cta:hover{transform:translateY(-2px);box-shadow:0 14px 32px -6px rgba(0,182,122,.6)}
+  .alert-wrap{text-align:center}
+  .subscribe{margin:20px 0 8px;background:linear-gradient(135deg,#081C2E,#12355A);
+    border-radius:var(--r-lg);padding:44px 32px;text-align:center;position:relative;overflow:hidden;
+    box-shadow:var(--shadow-lg)}
+  .subscribe::after{content:"";position:absolute;inset:0;opacity:.1;
+    background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);background-size:40px 40px;
+    mask-image:linear-gradient(180deg,#000,transparent 90%)}
+  .subscribe .s-in{position:relative;z-index:1;max-width:540px;margin:0 auto}
+  .subscribe .s-ic{width:60px;height:60px;border-radius:18px;background:rgba(0,182,122,.18);
+    border:1px solid rgba(0,182,122,.3);display:grid;place-items:center;margin:0 auto 18px;font-size:28px}
+  .subscribe h2{font-family:var(--display);color:#fff;font-size:clamp(22px,3vw,30px);font-weight:800;
+    letter-spacing:-.03em;margin-bottom:10px}
+  .subscribe p{color:#C4D6EC;font-size:15px;margin-bottom:24px;line-height:1.55}
+  .subscribe .s-btn{font:inherit;font-size:15.5px;font-weight:700;cursor:pointer;
+    background:linear-gradient(135deg,var(--emerald),#00A06C);color:#fff;border:none;border-radius:14px;
+    padding:15px 32px;box-shadow:0 10px 26px -6px rgba(0,182,122,.6);transition:transform .18s var(--ease)}
+  .subscribe .s-btn:hover{transform:translateY(-2px)}
+
+  /* animated stats — floating luxury cards */
+  .hero-stats{position:relative;z-index:1;display:flex;justify-content:center;
+    gap:16px;flex-wrap:wrap;margin-top:36px;animation:fadeUp .9s var(--ease) .3s both}
+  .hero-stats .s{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:18px 26px;min-width:150px;
+    box-shadow:0 12px 34px -12px rgba(0,0,0,.4);transition:transform .3s var(--ease)}
+  .hero-stats .s:hover{transform:translateY(-4px)}
+  .hero-stats .s b{display:block;font-family:var(--display);font-size:30px;font-weight:800;color:#fff;
+    letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .hero-stats .s span{font-size:12.5px;color:#B8CCE4;font-weight:500}
+
+  /* ---------- FILTER BAR ---------- */
+  .toolbar{position:sticky;top:62px;z-index:20;background:rgba(248,250,252,.9);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:14px 0}
+  .toolbar .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .toolbar select,.toolbar input{font:inherit;font-size:14px;color:var(--ink);
+    background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:10px 13px;box-shadow:var(--shadow-sm);transition:border-color .15s}
+  .toolbar input[type=search]{flex:1;min-width:170px}
+  .toolbar input[type=number]{width:140px}
+  .toolbar select:focus,.toolbar input:focus{outline:none;border-color:var(--blue);
+    box-shadow:0 0 0 3px var(--blue-soft)}
+  .chk{display:flex;align-items:center;gap:7px;font-size:14px;color:var(--ink);
+    white-space:nowrap;cursor:pointer;background:var(--card);border:1px solid var(--line);
+    border-radius:11px;padding:10px 13px;box-shadow:var(--shadow-sm)}
+  .chk input{width:16px;height:16px;accent-color:var(--blue);cursor:pointer}
+  .clearbtn{font:inherit;font-size:13px;font-weight:600;cursor:pointer;background:none;
+    border:none;color:var(--muted);margin-inline-start:auto;padding:6px 4px}
+  .clearbtn:hover{color:var(--danger)}
+  .card .when.urg{color:var(--danger);font-weight:700}
+  .card .when.urg .dot{background:var(--danger);animation:pulse 1.8s infinite}
+  .count{font-size:13px;color:var(--muted);white-space:nowrap;
+    font-weight:500}
+
+  /* views toggle */
+  .views{display:flex;gap:8px;padding:22px 0 6px}
+  .views button{font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:9px 17px;color:var(--muted);box-shadow:var(--shadow-sm);transition:all .15s}
+  .views button:hover{color:var(--navy)}
+  .views button[aria-current=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+  /* ---------- GRID + CARDS ---------- */
+  main{padding-bottom:60px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
+    gap:24px;padding-top:8px}
+  .dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;
+    margin:8px 0 22px}
+  .dash-card{background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:18px 20px;box-shadow:var(--shadow-sm);transition:transform .3s var(--ease),box-shadow .3s;
+    animation:fadeUp .6s var(--ease) both}
+  .dash-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+  .dash-card .dc-lbl{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--muted);display:flex;align-items:center;gap:6px;margin-bottom:10px}
+  .dash-card .dc-ic{font-size:14px}
+  .dash-card .dc-val{font-family:var(--display);font-size:26px;font-weight:800;letter-spacing:-.03em;
+    color:var(--ink);line-height:1;font-variant-numeric:tabular-nums}
+  .dash-card .dc-sub{font-size:12px;color:var(--muted);margin-top:5px}
+  .dash-card .dc-val.pos{color:var(--emerald)}
+  .temp-bar{height:6px;border-radius:99px;background:var(--line);margin-top:12px;overflow:hidden}
+  .temp-fill{height:100%;border-radius:99px;
+    background:linear-gradient(90deg,var(--blue),var(--emerald));transition:width 1s var(--ease)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+    box-shadow:var(--shadow-sm);text-decoration:none;color:inherit;overflow:hidden;
+    display:flex;flex-direction:column;transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .3s;
+    position:relative}
+  .card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:transparent}
+  .card .banner{height:180px;position:relative;overflow:hidden;
+    background:linear-gradient(120deg,#EAF2FE,#E4F7F0)}
+  .card .banner-img{position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;filter:saturate(1.08);transition:transform .6s var(--ease)}
+  .card:hover .banner-img{transform:scale(1.06)}
+  .card .banner::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(8,28,46,0) 35%,rgba(8,28,46,.6) 100%)}
+  .card .banner .type{position:absolute;inset-inline-start:18px;bottom:14px;z-index:2;
+    font-family:var(--display);font-size:17px;font-weight:800;color:#fff;letter-spacing:-.02em;
+    text-shadow:0 2px 8px rgba(0,0,0,.45)}
+  .banner.no-img .type{color:var(--navy);text-shadow:none}
+  .banner.no-img::after{display:none}
+  .card .banner .disc{position:absolute;inset-inline-end:14px;top:14px;z-index:2;
+    background:linear-gradient(135deg,var(--emerald),#00A06C);color:#fff;font-size:12.5px;font-weight:800;
+    border-radius:10px;padding:6px 11px;letter-spacing:.01em;box-shadow:0 6px 16px -3px rgba(0,182,122,.5)}
+  .card .banner .initials{position:absolute;font-family:var(--display);font-size:82px;font-weight:800;
+    color:rgba(8,28,46,.06);inset-inline-end:16px;top:-16px;letter-spacing:-.04em;display:none}
+  .banner.no-img .initials{display:block}
+  .card .body{padding:20px 20px 20px;display:flex;flex-direction:column;gap:11px;flex:1}
+  .card .loc{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:5px}
+  .card .price-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .card .price{font-family:var(--display);font-size:29px;font-weight:800;letter-spacing:-.035em;color:var(--ink);
+    font-variant-numeric:tabular-nums;line-height:1}
+  .card .per{font-size:12px;color:var(--muted);font-family:var(--mono)}
+  .card .meta{font-family:var(--mono);font-size:11.5px;color:var(--muted);
+    display:flex;gap:12px;flex-wrap:wrap}
+  .card .when{font-size:12.5px;color:var(--navy);font-weight:600;display:flex;
+    align-items:center;gap:6px}
+  .card .when .dot{width:6px;height:6px;border-radius:99px;background:var(--emerald)}
+
+  .badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .badge{font-size:11px;font-weight:700;border-radius:8px;padding:4px 9px;letter-spacing:.01em}
+  .badge.new{background:var(--blue-soft);color:var(--blue)}
+  .badge.drop{background:var(--emerald-soft);color:var(--emerald)}
+  .badge.again{background:var(--line);color:var(--muted)}
+  .badge.cat{background:var(--blue-soft);color:var(--navy)}
+  .badge.opp{background:linear-gradient(135deg,#F0B429,#E8890C);color:#fff;
+    box-shadow:0 3px 10px -2px rgba(232,137,12,.45)}
+  .badge.vacant{background:#E0F2FE;color:#0369A1}
+  .badge.yield{background:var(--emerald-soft);color:var(--emerald)}
+  .conf{font-size:11px;color:var(--muted);margin-inline-start:auto;display:flex;
+    align-items:center;gap:4px}
+  .conf .d{width:6px;height:6px;border-radius:99px}
+  .conf.high .d{background:var(--success)}.conf.medium .d{background:var(--warn)}
+  .conf.low .d{background:#CBD2DA}
+  .badge.ai{color:#fff}
+  .badge.ai.deal{background:var(--emerald)}
+  .badge.ai.fair{background:var(--blue)}
+  .badge.ai.caution{background:var(--warn)}
+  /* Apple-ring style AI score */
+  .score{display:flex;align-items:center;gap:13px;background:linear-gradient(135deg,var(--bg),var(--card));
+    border:1px solid var(--line);border-radius:16px;padding:13px 15px}
+  .score .ring{--v:0;width:52px;height:52px;border-radius:99px;flex-shrink:0;
+    background:conic-gradient(var(--sc,var(--blue)) calc(var(--v)*3.6deg),var(--line) 0);
+    display:grid;place-items:center;position:relative;
+    box-shadow:0 4px 14px -4px var(--sc,var(--blue));animation:ringIn .9s var(--ease) both}
+  @keyframes ringIn{from{--v:0;opacity:.4}to{opacity:1}}
+  .score .ring i{width:40px;height:40px;border-radius:99px;background:var(--card);
+    display:grid;place-items:center;font-style:normal;font-family:var(--display);
+    font-size:15px;font-weight:800;color:var(--ink)}
+  .score .lbl{font-size:13px;line-height:1.35}
+  .score .lbl b{display:block;font-size:13.5px;font-weight:700;font-family:var(--display)}
+  .score .lbl span{color:var(--muted)}
+  .valbox{display:flex;align-items:center;gap:11px;background:var(--emerald-soft);
+    border:1px solid rgba(0,182,122,.22);border-radius:14px;padding:11px 14px;margin-top:2px}
+  .valbox-disc{font-family:var(--display);font-size:19px;font-weight:800;color:var(--emerald)}
+  .valbox-txt{font-size:12px;color:#3A5A4C;line-height:1.35}
+  html[data-theme=dark] .valbox-txt{color:#7FC9AD}
+  .why-btn{font:inherit;font-size:11.5px;font-weight:600;cursor:pointer;background:none;
+    border:none;color:var(--blue);text-decoration:underline;text-underline-offset:2px;
+    padding:0;margin-inline-start:auto}
+  .flags{display:flex;flex-direction:column;gap:3px}
+  .flag{font-size:12px;color:#9A6212;line-height:1.4}
+  html[data-theme=dark] .flag{color:#E0A951}
+  .flag::before{content:"⚠ "}
+  .ai-summary{font-size:13px;color:#4B5563;line-height:1.5}
+  html[data-theme=dark] .ai-summary{color:#9AA6B4}
+  .fav{position:absolute;inset-inline-start:12px;top:12px;z-index:2;width:32px;height:32px;
+    border-radius:99px;background:rgba(255,255,255,.9);border:1px solid var(--line);
+    display:grid;place-items:center;cursor:pointer;font-size:15px;box-shadow:var(--shadow-sm);
+    transition:transform .12s}
+  .fav:hover{transform:scale(1.1)}
+  .fav[aria-pressed=true]{color:var(--danger)}
+
+  .card .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+  .btn-primary{font:inherit;font-size:13px;font-weight:600;cursor:pointer;background:var(--navy);
+    color:#fff;border:none;border-radius:10px;padding:9px 15px;transition:background .15s}
+  .btn-primary:hover{background:#0E3350}
+  .btn-ghost{font:inherit;font-size:13px;font-weight:600;cursor:pointer;background:none;
+    color:var(--muted);border:none;border-radius:10px;padding:9px 6px;transition:color .15s}
+  .btn-ghost:hover{color:var(--navy)}
+
+  /* map */
+  #mapWrap{padding-top:14px}
+  .dtiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+  .dtile{display:flex;flex-direction:column;gap:8px;background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:16px 18px;cursor:pointer;
+    box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s;text-align:start}
+  .dtile:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+  .dt-top{display:flex;align-items:center;gap:8px}
+  .dt-dot{width:11px;height:11px;border-radius:99px;flex-shrink:0}
+  .dt-name{font-weight:700;color:var(--navy);font-size:15px}
+  .dt-bottom{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .dt-n{font-family:var(--mono);font-size:24px;font-weight:800;color:var(--ink);line-height:1}
+  .dt-nlbl{font-size:11px;color:var(--muted)}
+  .dt-ai{font-size:12px;font-weight:800;color:#fff;background:var(--emerald);
+    border-radius:7px;padding:3px 9px}
+  .cy-map{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    box-shadow:var(--shadow-sm);padding:20px;max-width:720px;margin:0 auto}
+  .cy-map svg{width:100%;height:auto;display:block}
+  .cy-dot{cursor:pointer}.cy-dot:hover{opacity:.85}
+  .cy-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-size:12.5px}
+  .cy-legend span{display:flex;align-items:center;gap:6px;color:var(--muted)}
+  .cy-legend i{width:11px;height:11px;border-radius:99px}
+
+  /* states */
+  .state{padding:70px 0;text-align:center;color:var(--muted);grid-column:1/-1}
+  .state h2{font-weight:800;color:var(--ink);margin-bottom:8px;font-size:21px}
+  .state code{font-family:var(--mono);background:var(--card);border:1px solid var(--line);
+    padding:2px 7px;border-radius:6px}
+  .skeleton{grid-column:1/-1;display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
+  .sk{height:230px;border-radius:var(--r);background:
+    linear-gradient(100deg,#EEF2F7 30%,#F6F8FB 50%,#EEF2F7 70%);
+    background-size:200% 100%;animation:sh 1.3s infinite}
+  @keyframes sh{to{background-position:-200% 0}}
+
+  /* modals */
+  .modal-bg{position:fixed;inset:0;background:rgba(17,24,39,.5);z-index:60;
+    display:flex;align-items:center;justify-content:center;padding:18px;
+    backdrop-filter:blur(3px);animation:fade .18s ease}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .modal{background:#fff;border-radius:var(--r);max-width:420px;width:100%;
+    padding:24px;box-shadow:var(--shadow-lg);animation:pop .2s ease}
+  @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+  .modal h3{font-size:20px;font-weight:800;margin-bottom:2px;letter-spacing:-.01em}
+  .modal .mcode{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:14px}
+  .modal label{display:block;font-size:12.5px;font-weight:600;margin:11px 0 5px}
+  .modal input,.modal select{width:100%;font:inherit;font-size:14px;border:1px solid var(--line);
+    border-radius:11px;padding:10px 12px;background:#fff}
+  .modal input:focus,.modal select:focus{outline:none;border-color:var(--blue);
+    box-shadow:0 0 0 3px var(--blue-soft)}
+  .modal .actions{display:flex;gap:8px;margin-top:18px}
+  .modal .send{flex:1;font:inherit;font-weight:600;cursor:pointer;background:var(--navy);
+    color:#fff;border:none;border-radius:11px;padding:11px}
+  .modal .close{font:inherit;cursor:pointer;background:none;border:1px solid var(--line);
+    border-radius:11px;padding:11px 15px;color:var(--muted)}
+  .modal .privacy{font-size:11.5px;color:var(--muted);margin-top:11px}
+  .modal .msg{margin-top:12px;font-size:13.5px;font-weight:600}
+  .cost-table{width:100%;font-size:13.5px;margin-top:6px;border-collapse:collapse}
+  .cost-table td{padding:7px 0;border-bottom:1px solid var(--line)}
+  .cost-table td:last-child{text-align:end;font-family:var(--mono)}
+  .cost-table tr.total td{font-weight:800;border-bottom:none;padding-top:10px;font-size:15px}
+  .why-score{font-family:var(--mono);font-size:30px;font-weight:800;color:var(--ink)}
+  .why-verdict{font-size:13px;color:var(--muted);margin-bottom:8px}
+  .why-list{margin:8px 0 0;padding:0;list-style:none}
+  .why-list li{font-size:13.5px;color:#374151;padding:7px 0 7px 18px;position:relative;line-height:1.5}
+  .why-list li::before{content:"›";position:absolute;inset-inline-start:0;color:var(--blue);font-weight:800}
+  .sig-box{background:#F7F9FC;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px}
+  .sig-h{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:10px}
+  .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .sig-grid>div{display:flex;flex-direction:column}
+  .sig-grid b{font-family:var(--mono);font-size:19px;font-weight:800;color:var(--navy)}
+  .sig-grid span{font-size:11.5px;color:var(--muted);line-height:1.3}
+  .unsold-box{background:#FFF7ED;border:1px solid #FCD9A8;border-radius:12px;padding:14px;margin-top:12px}
+  .unsold-h{font-size:12.5px;font-weight:800;color:#9A5B1E;margin-bottom:8px}
+  .unsold-box ul{list-style:none;display:grid;gap:7px}
+  .unsold-box li{font-size:13px;color:#7A4A1A;line-height:1.45;padding-inline-start:14px;position:relative}
+  .unsold-box li::before{content:"•";position:absolute;inset-inline-start:0;color:#C77E2E}
+  .unsold-note{font-size:11px;color:#A0763E;margin-top:8px;font-style:italic}
+  .ph-box{background:#F7F9FC;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px}
+  .ph-h{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px}
+  .ph-svg{width:100%;height:auto;display:block}
+  .ph-ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px}
+  .sim-box{margin-top:12px}
+  .sim-h{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px}
+  .sim-item{display:grid;grid-template-columns:1fr auto;gap:2px 10px;background:var(--card);
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:7px;cursor:pointer;transition:border-color .15s}
+  .sim-item:hover{border-color:var(--blue)}
+  .sim-t{font-weight:700;font-size:14px;color:var(--navy)}
+  .sim-meta{font-size:12px;color:var(--muted);grid-column:1}
+  .sim-price{grid-row:1/3;align-self:center;font-family:var(--mono);font-weight:700;font-size:13px;color:var(--ink);text-align:end}
+
+  /* footer */
+  .dlinks-wrap{padding:8px 0 30px}
+  .dlinks{display:flex;flex-wrap:wrap;gap:10px}
+  .dlinks a{font-size:13.5px;font-weight:600;color:var(--navy);background:var(--card);
+    border:1px solid var(--line);border-radius:99px;padding:8px 15px;text-decoration:none;
+    box-shadow:var(--shadow-sm);transition:border-color .15s}
+  .dlinks a:hover{border-color:var(--blue)}
+  footer{border-top:1px solid var(--line);background:#fff;padding:34px 0 46px;
+    font-size:12.5px;color:var(--muted)}
+  footer .fbrand{font-weight:800;color:var(--navy);font-size:15px;margin-bottom:10px}
+  footer p{max-width:780px;margin-bottom:8px}
+  footer a{color:var(--blue)}
+
+  .filter-toggle{display:none;align-items:center;justify-content:space-between;
+    width:100%;font:inherit;font-size:14.5px;font-weight:600;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 16px;color:var(--navy);box-shadow:var(--shadow-sm)}
+  .filter-toggle .chev{transition:transform .2s;color:var(--muted)}
+  .toolbar.open .filter-toggle .chev{transform:rotate(180deg)}
+  @media(max-width:640px){
+    .hero .wrap{padding:52px 20px 92px}
+    .searchbar{margin-top:-46px}
+    .grid,.skeleton{grid-template-columns:1fr}
+    .nav{position:static}
+    .toolbar{position:static;padding:10px 0}
+    .filter-toggle{display:flex}
+    .toolbar .row{display:none}
+    .toolbar.open .row{display:flex;padding-top:12px}
+    .count{margin-inline-start:0;width:100%;order:9}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap row">
+    <a class="brand" href="index.html"><span class="mark">C</span>Cyprus&nbsp;Auctions</a>
+    <span class="spacer"></span>
+    <a class="link" id="guideLink" href="guide.html"></a>
+    <a class="link" id="reportLink" href="report.html"></a>
+    <a class="link" id="partnersLink" href="partners.html"></a>
+    <nav class="langs" id="langs" aria-label="Language">
+      <button data-lang="el">ΕΛ</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="ru">РУ</button>
+      <button data-lang="he">עב</button>
+    </nav>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">◐</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow"><span class="pulse"></span><span data-t="eyebrow"></span></span>
+    <h1 data-t="title"></h1>
+    <p class="sub" data-t="sub"></p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="searchbar">
+    <div class="field">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="search" id="fSearch">
+    </div>
+    <button class="go" id="searchGo" data-t="searchGo"></button>
+  </div>
+  <div class="alert-wrap"><button class="alert-cta" id="alertOpen"></button></div>
+  <div class="hero-stats" id="stats"></div>
+</div>
+
+<div class="toolbar" id="toolbar">
+  <div class="wrap">
+    <button class="filter-toggle" id="filterToggle">
+      <span id="filterToggleLbl"></span>
+      <span class="chev">▾</span>
+    </button>
+  </div>
+  <div class="wrap row">
+    <select id="fDistrict"></select>
+    <select id="fType"></select>
+    <input type="number" id="fMin" min="0" step="1000">
+    <input type="number" id="fMax" min="0" step="1000">
+    <input type="number" id="fMaxM2" min="0" step="100">
+    <select id="fCat"></select>
+    <select id="fTime"></select>
+    <input type="number" id="fYield" min="0" max="25" step="0.5">
+    <label class="chk"><input type="checkbox" id="fFull"><span id="fFullLbl"></span></label>
+    <label class="chk"><input type="checkbox" id="fDrop"><span id="fDropLbl"></span></label>
+    <select id="fSort"></select>
+    <button class="clearbtn" id="clearF"></button>
+    <span class="count" id="count"></span>
+    <span class="updated" id="updated" style="display:none"></span>
+  </div>
+</div>
+
+
+<main>
+  <div class="wrap"><div class="views" id="views">
+    <button data-view="all" aria-current="true" id="vAll"></button>
+    <button data-view="top" id="vTop"></button>
+    <button data-view="fav" id="vFav"></button>
+    <button data-view="map" id="vMap"></button>
+  </div></div>
+  <div class="wrap"><div class="dash" id="dash"></div></div>
+  <div class="wrap" id="mapWrap" style="display:none"></div>
+  <div class="wrap"><div class="grid" id="list"><!--SSR-->
+    <div class="skeleton"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+  <!--/SSR--></div></div>
+</main>
+
+<div class="wrap">
+  <div class="subscribe">
+    <div class="s-in">
+      <div class="s-ic">🔔</div>
+      <h2 id="subTitle"></h2>
+      <p id="subText"></p>
+      <button class="s-btn" id="subBtn"></button>
+    </div>
+  </div>
+</div>
+<div class="wrap"><div class="dlinks-wrap"><!--DLINKS--><!--/DLINKS--></div></div>
+<footer>
+  <div class="wrap">
+    <div class="fbrand">Cyprus Auctions</div>
+    <p data-t="foot1"></p>
+    <p><span data-t="foot2"></span>
+      <a href="https://www.eauction-cy.com" rel="noopener">eauction-cy.com</a>.
+      <span data-t="foot3"></span></p>
+    <p data-t="foot4"></p>
+    <p style="margin-top:10px"><a href="legal.html" data-t="footLegal" style="color:var(--blue);font-weight:600"></a></p>
+  </div>
+</footer>
+
+<script>
+/* ============================ ΜΕΤΑΦΡΑΣΕΙΣ ============================ */
+const I18N = {
+  el: {
+    dir:"ltr", locale:"el-GR",
+    eyebrow:"Ανεξάρτητο ευρετήριο · Ενημερώνεται καθημερινά",
+    title:"Πλειστηριασμοί ακινήτων Κύπρου, σε μία σελίδα",
+    sub:"Όλοι οι επερχόμενοι ηλεκτρονικοί πλειστηριασμοί ενυπόθηκων ακινήτων, με φίλτρα ανά επαρχία, είδος και τιμή — και σήμανση όσων έχουν μειωμένη τιμή.",
+    upcoming:"επερχόμενοι", next7:"τις επόμενες 7 ημέρες", reduced:"με μειωμένη τιμή",
+    totalValue:"Συνολική αξία", dashAdded:"Νέα σήμερα", dashAddedSub:"ακίνητα που προστέθηκαν", dashAvgDisc:"Μέση έκπτωση", dashAvgDiscSub:"στα μειωμένα ακίνητα", dashMaxDisc:"Μεγαλύτερη έκπτωση", dashMaxDiscSub:"από αρχική τιμή", dashActive:"Πιο ενεργή περιοχή", dashTemp:"Θερμοκρασία αγοράς",
+    updated:"Τελευταία ενημέρωση", allDistricts:"Όλες οι επαρχίες", allTypes:"Όλα τα είδη",
+    maxPrice:"Έως € τιμή",
+    fullOwn:"Μόνο πλήρης κυριότητα", maxM2:"Έως €/m²",
+    minPrice:"Από τιμή €", catFilter:"Κατηγορία", timeFilter:"Πότε γίνεται", time7:"Επόμενες 7 ημέρες", time30:"Επόμενες 30 ημέρες", onlyDrop:"Μόνο μειωμένη τιμή",
+    lowPrice:"💎 Ευκαιρία", vacant:"Ελεύθερο", oppFilter:"Μόνο ευκαιρίες (≤€30k)", minYield:"Ελάχ. απόδοση %", topWeek:"Top ευκαιρίες", allView:"Όλα", mapView:"Χάρτης", noM2:"—", search:"Αναζήτηση: περιοχή, δανειστής, κωδικός…",
+    sortDate:"Πλησιέστεροι πρώτα", sortPriceAsc:"Φθηνότεροι πρώτα",
+    sortPriceDesc:"Ακριβότεροι πρώτα", sortDrop:"Μεγαλύτερη μείωση τιμής",
+    sortAI:"Υψηλότερο AI σκορ", aiDeal:"Πιθανή ευκαιρία", aiFair:"Λογική τιμή", aiCaution:"Θέλει προσοχή", aiNote:"Εκτίμηση AI — όχι συμβουλή",
+    aiScore:"AI σκορ",
+    estValue:"Εκτ. αγοραία αξία",
+    sigTitle:"Δυναμική τιμής",
+    priceHist:"Ιστορικό τιμής", similar:"Παρόμοια ακίνητα",
+    unsoldTitle:"Πιθανοί λόγοι που δεν πουλήθηκε",unsoldNote:"Εκτίμηση βάσει δεδομένων — όχι επιβεβαιωμένη αιτία.", sigDrop:"Συνολική πτώση", sigVel:"Ταχύτητα πτώσης", sigVelU:"%/μήνα", sigMonths:"Μήνες στην αγορά", sigCuts:"Μειώσεις τιμής", sigLiq:"Ρευστότητα περιοχής", sigLiqU:"ημέρες μέση πώληση", belowMarket:"κάτω από αγορά", valMethod:"Μέθοδος", mComparable:"Συγκριτική", mIncome:"Εισοδηματική", mMixed:"Μεικτή", mInsufficient:"Ανεπαρκή δεδομένα", aiWhy:"Γιατί;", aiWhyTitle:"Πώς προέκυψε το AI σκορ",
+    catFlip:"Ανακαίνιση & μεταπώληση", catLet:"Ενοικίαση", catLand:"Οικόπεδο/Γη", catCom:"Επαγγελματικό", catUnclear:"", confH:"Υψηλή αξιοπιστία", confM:"Μέτρια αξιοπιστία", confL:"Χαμηλή αξιοπιστία", yieldLbl:"Απόδοση",
+    searchGo:"Αναζήτηση",
+    filtersLbl:"Φίλτρα & ταξινόμηση", favTitle:"Αποθήκευση",
+    photosBtn:"📷 Φωτογραφίες", mapBtn:"📍 Χάρτης", locTitle:"Τοποθεσία ακινήτου", locNote:"Χάρτης περιοχής από OpenStreetMap — ενδεικτική θέση βάσει περιοχής, όχι ακριβές σημείο.", openMap:"Άνοιγμα σε πλήρη χάρτη",
+    satView:"Δορυφορική", satLandTip:"Για οικόπεδα/γη η δορυφορική δείχνει το σχήμα, την πρόσβαση σε δρόμο και τη γύρω περιοχή.",
+    clearF:"Καθαρισμός", favView:"Αγαπημένα", urgent:"Επείγει", noFav:"Δεν έχεις αποθηκεύσει ακίνητα ακόμη. Πάτα ♡ σε όποιο σε ενδιαφέρει.", cdToday:"Σήμερα!", cdTomorrow:"Αύριο", cdDays:"σε {n} ημέρες", cdPast:"Ολοκληρώθηκε",
+    leadBtn:"Ενδιαφέρομαι", leadTitle:"Ενδιαφέρον για το ακίνητο", leadName:"Όνομα", leadEmail:"Email", leadPhone:"Τηλέφωνο", leadWant:"Τι χρειάζεσαι;", optLegal:"Νομικό έλεγχο", optFinance:"Χρηματοδότηση", optValuation:"Εκτίμηση αξίας", optBid:"Συμμετοχή στον πλειστηριασμό", leadSend:"Αποστολή", leadOk:"Το λάβαμε! Θα επικοινωνήσουμε σύντομα μαζί σου.", leadErr:"Κάτι πήγε στραβά — δοκίμασε ξανά.", leadPrivacy:"Τα στοιχεία σου χρησιμοποιούνται μόνο για να σε εξυπηρετήσουμε στο συγκεκριμένο αίτημα.",
+    alertBtn:"🔔 Ειδοποιήσεις",
+    subTitle:"Μη χάνεις καμία ευκαιρία", subText:"Λάβε ειδοποίηση με email μόλις βγει ακίνητο που ταιριάζει στα κριτήριά σου — περιοχή, τιμή, απόδοση, AI σκορ.", subBtn:"Ενεργοποίηση ειδοποιήσεων",
+    bannerText:"Θες να ειδοποιείσαι για νέες ευκαιρίες;", bannerYes:"Ναι, ειδοποίησέ με", bannerNo:"Όχι τώρα", exitTitle:"Πριν φύγεις", exitText:"Άφησε το email σου και θα σε ειδοποιούμε όταν βγαίνει ακίνητο-ευκαιρία που σε ενδιαφέρει.", exitBtn:"Ενεργοποίηση ειδοποιήσεων", exitSkip:"Όχι ευχαριστώ", alertTitle:"Ειδοποιήσεις νέων ευκαιριών", alertLead:"Λάβε email όταν βγαίνει ακίνητο που ταιριάζει στα κριτήριά σου.", alertEmail:"Το email σου", alertWhich:"Θέλω ειδοποίηση για:", alertAny:"Οποιαδήποτε περιοχή", alertAnyType:"Οποιοδήποτε είδος", alertMaxP:"Έως τιμή €", alertMinScore:"Ελάχιστο AI σκορ", alertSub:"Εγγραφή", alertOk:"Εγγράφηκες! Θα λαμβάνεις ειδοποιήσεις στα κριτήριά σου.", alertPrivacy:"Μόνο για ειδοποιήσεις ακινήτων. Διαγραφή όποτε θες, με ένα κλικ.",
+    costBtn:"Συνολικό κόστος", calBtn:"Ημερολόγιο", costTitle:"Εκτίμηση συνολικού κόστους", costPrice:"Τιμή κατακύρωσης (υποθετική)", costTransfer:"Μεταβιβαστικά τέλη (με 50% μείωση)", costStamp:"Χαρτόσημα", costLegal:"Νομικά έξοδα (εκτίμηση)", costTotal:"Εκτιμώμενο σύνολο", costNote:"Ενδεικτικός υπολογισμός — τα ακριβή ποσά εξαρτώνται από ΦΠΑ, απαλλαγές και τη διαδικασία. Επιβεβαίωση με δικηγόρο.",
+    roiTitle:"Υπολογισμός απόδοσης (ROI)", roiReno:"Κόστος ανακαίνισης €", roiRent:"Μηνιαίο ενοίκιο €", roiResale:"Τιμή μεταπώλησης €", roiYield:"Απόδοση ενοικίου", roiAnnual:"Ετήσιο εισόδημα", roiProfit:"Κέρδος μεταπώλησης", roiReturn:"Απόδοση κεφαλαίου", roiInvested:"Συνολική επένδυση", calDeposit:"Προθεσμία εγγύησης (ενδεικτικά 5 μέρες πριν)", calAuction:"Πλειστηριασμός",
+    guideLink:"Οδηγός συμμετοχής",
+    reportLink:"Αναφορά αγοράς",
+    partnersLink:"Για επαγγελματίες",
+    of:"από", property:"Ακίνητο", new:"Νέο", drop:"−{n}% από αρχική", again:"Επαναληπτικός",
+    loading:"Φόρτωση…", emptyH:"Κανένα αποτέλεσμα", emptyP:"Δοκίμασε να χαλαρώσεις τα φίλτρα.",
+    errH:"Τα δεδομένα δεν έχουν δημιουργηθεί ακόμη",
+    errP:"Στο GitHub, άνοιξε την καρτέλα Actions, επίλεξε «Ενημέρωση πλειστηριασμών» και πάτησε Run workflow. Σε 2-3 λεπτά κάνε ανανέωση εδώ.",
+    foot1:"Το «Πλειστηριασμοί Κύπρου» είναι ανεξάρτητη υπηρεσία πληροφόρησης. Δεν διοργανώνουμε πλειστηριασμούς και δεν σχετιζόμαστε με τους διοργανωτές.",
+    foot2:"Τα στοιχεία προέρχονται από δημόσιες αναρτήσεις και ενδέχεται να περιέχουν σφάλματα ή να έχουν αλλάξει. Πριν από κάθε ενέργεια, επιβεβαιώστε τα στην επίσημη πηγή:",
+    foot3:"Δεν αποθηκεύουμε ούτε εμφανίζουμε προσωπικά δεδομένα.",
+    foot4:"Οι πληροφορίες δεν αποτελούν επενδυτική, νομική ή άλλη συμβουλή.",
+    footLegal:"Όροι Χρήσης, Απόρρητο & Νομικά →"
+  },
+  en: {
+    dir:"ltr", locale:"en-GB",
+    eyebrow:"Independent index · Updated daily",
+    title:"Cyprus property auctions, on one page",
+    sub:"Every upcoming electronic auction of mortgaged property in Cyprus, with filters by district, type and price — and clear marking of price reductions.",
+    upcoming:"upcoming", next7:"in the next 7 days", reduced:"with reduced price",
+    totalValue:"Total value", dashAdded:"New today", dashAddedSub:"properties added", dashAvgDisc:"Average discount", dashAvgDiscSub:"on reduced properties", dashMaxDisc:"Largest discount", dashMaxDiscSub:"from initial price", dashActive:"Most active area", dashTemp:"Market temperature",
+    updated:"Last updated", allDistricts:"All districts", allTypes:"All types",
+    maxPrice:"Max € price",
+    fullOwn:"Full ownership only", maxM2:"Max €/m²",
+    minPrice:"From price €", catFilter:"Category", timeFilter:"When", time7:"Next 7 days", time30:"Next 30 days", onlyDrop:"Reduced price only",
+    lowPrice:"💎 Opportunity", vacant:"Vacant", oppFilter:"Opportunities only (≤€30k)", minYield:"Min yield %", topWeek:"Top deals", allView:"All", mapView:"Map", noM2:"—", search:"Search: area, lender, code…",
+    sortDate:"Soonest first", sortPriceAsc:"Cheapest first",
+    sortPriceDesc:"Most expensive first", sortDrop:"Biggest price drop",
+    sortAI:"Highest AI score", aiDeal:"Potential deal", aiFair:"Fair price", aiCaution:"Needs caution", aiNote:"AI estimate — not advice",
+    aiScore:"AI score",
+    estValue:"Est. market value",
+    sigTitle:"Price dynamics",
+    priceHist:"Price history", similar:"Similar properties",
+    unsoldTitle:"Possible reasons it didn\u0027t sell",unsoldNote:"Estimate based on data — not a confirmed cause.", sigDrop:"Total drop", sigVel:"Drop velocity", sigVelU:"%/month", sigMonths:"Months on market", sigCuts:"Price cuts", sigLiq:"Area liquidity", sigLiqU:"days avg to sell", belowMarket:"below market", valMethod:"Method", mComparable:"Comparable", mIncome:"Income", mMixed:"Mixed", mInsufficient:"Insufficient data", aiWhy:"Why?", aiWhyTitle:"How the AI score was reached",
+    catFlip:"Flip", catLet:"Buy-to-let", catLand:"Land/Plot", catCom:"Commercial", catUnclear:"", confH:"High confidence", confM:"Medium confidence", confL:"Low confidence", yieldLbl:"Yield",
+    searchGo:"Search",
+    filtersLbl:"Filters & sort", favTitle:"Save",
+    photosBtn:"📷 Photos", mapBtn:"📍 Map", locTitle:"Property location", locNote:"Area map via OpenStreetMap — indicative position based on the area, not an exact point.", openMap:"Open in full map",
+    satView:"Satellite", satLandTip:"For land/plots, the satellite view shows the shape, road access and surroundings.",
+    clearF:"Clear", favView:"Saved", urgent:"Urgent", noFav:"You haven\u0027t saved any properties yet. Tap ♡ on any that interest you.", cdToday:"Today!", cdTomorrow:"Tomorrow", cdDays:"in {n} days", cdPast:"Completed",
+    leadBtn:"I\u0027m interested", leadTitle:"Interest in this property", leadName:"Name", leadEmail:"Email", leadPhone:"Phone", leadWant:"What do you need?", optLegal:"Legal check", optFinance:"Financing", optValuation:"Valuation", optBid:"Bidding assistance", leadSend:"Send", leadOk:"Received! We will contact you shortly.", leadErr:"Something went wrong — please try again.", leadPrivacy:"Your details are used only to handle this specific request.",
+    alertBtn:"🔔 Alerts",
+    subTitle:"Never miss an opportunity", subText:"Get an email the moment a property matching your criteria appears — area, price, yield, AI score.", subBtn:"Enable alerts",
+    bannerText:"Want alerts for new opportunities?", bannerYes:"Yes, notify me", bannerNo:"Not now", exitTitle:"Before you go", exitText:"Leave your email and we\u0027ll alert you when a matching opportunity appears.", exitBtn:"Enable alerts", exitSkip:"No thanks", alertTitle:"New opportunity alerts", alertLead:"Get an email when a property matching your criteria appears.", alertEmail:"Your email", alertWhich:"Alert me about:", alertAny:"Any district", alertAnyType:"Any type", alertMaxP:"Max price €", alertMinScore:"Min AI score", alertSub:"Subscribe", alertOk:"Subscribed! You\u0027ll get alerts for your criteria.", alertPrivacy:"Only for property alerts. Unsubscribe anytime, one click.",
+    costBtn:"Total cost", calBtn:"Calendar", costTitle:"Total cost estimate", costPrice:"Hammer price (hypothetical)", costTransfer:"Transfer fees (with 50% reduction)", costStamp:"Stamp duty", costLegal:"Legal fees (estimate)", costTotal:"Estimated total", costNote:"Indicative calculation — exact amounts depend on VAT, exemptions and procedure. Confirm with a lawyer.",
+    roiTitle:"Return calculator (ROI)", roiReno:"Renovation cost €", roiRent:"Monthly rent €", roiResale:"Resale price €", roiYield:"Rental yield", roiAnnual:"Annual income", roiProfit:"Resale profit", roiReturn:"Return on capital", roiInvested:"Total investment", calDeposit:"Deposit deadline (indicative, 5 days before)", calAuction:"Auction",
+    guideLink:"How to participate",
+    reportLink:"Market report",
+    partnersLink:"For professionals",
+    of:"of", property:"Property", new:"New", drop:"−{n}% from initial", again:"Relisted",
+    loading:"Loading…", emptyH:"No results", emptyP:"Try relaxing the filters.",
+    errH:"Data has not been generated yet",
+    errP:"On GitHub, open the Actions tab, select the scrape workflow and press Run workflow. Refresh this page in 2-3 minutes.",
+    foot1:"Cyprus Auctions is an independent information service. We do not organise auctions and are not affiliated with the organisers.",
+    foot2:"Data comes from public listings and may contain errors or have changed. Before acting, verify everything at the official source:",
+    foot3:"We do not store or display personal data.",
+    foot4:"This information does not constitute investment, legal or other advice.",
+    footLegal:"Terms of Use, Privacy & Legal →"
+  },
+  ru: {
+    dir:"ltr", locale:"ru-RU",
+    eyebrow:"Независимый каталог · Обновляется ежедневно",
+    title:"Аукционы недвижимости Кипра — на одной странице",
+    sub:"Все предстоящие электронные аукционы ипотечной недвижимости на Кипре: фильтры по району, типу и цене, с отметкой объектов со сниженной ценой.",
+    upcoming:"предстоящие", next7:"в ближайшие 7 дней", reduced:"со сниженной ценой",
+    totalValue:"Общая стоимость", dashAdded:"Новые сегодня", dashAddedSub:"объектов добавлено", dashAvgDisc:"Средняя скидка", dashAvgDiscSub:"на сниженных объектах", dashMaxDisc:"Наибольшая скидка", dashMaxDiscSub:"от начальной цены", dashActive:"Активный район", dashTemp:"Температура рынка",
+    updated:"Обновлено", allDistricts:"Все районы", allTypes:"Все типы",
+    maxPrice:"Цена до €",
+    fullOwn:"Только полная собственность", maxM2:"До €/m²",
+    minPrice:"Цена от €", catFilter:"Категория", timeFilter:"Когда", time7:"Ближайшие 7 дней", time30:"Ближайшие 30 дней", onlyDrop:"Только со скидкой",
+    lowPrice:"💎 Возможность", vacant:"Свободно", oppFilter:"Только выгодные (≤€30k)", minYield:"Мин. доходность %", topWeek:"Топ-выгоды", allView:"Все", mapView:"Карта", noM2:"—", search:"Поиск: район, кредитор, код…",
+    sortDate:"Сначала ближайшие", sortPriceAsc:"Сначала дешёвые",
+    sortPriceDesc:"Сначала дорогие", sortDrop:"Наибольшее снижение цены",
+    sortAI:"Высший AI-рейтинг", aiDeal:"Возможная выгода", aiFair:"Справедливая цена", aiCaution:"Требует внимания", aiNote:"Оценка ИИ — не совет",
+    aiScore:"AI-оценка",
+    estValue:"Оцен. рын. стоимость",
+    sigTitle:"Динамика цены",
+    priceHist:"История цены", similar:"Похожие объекты",
+    unsoldTitle:"Возможные причины непродажи",unsoldNote:"Оценка по данным — не подтверждённая причина.", sigDrop:"Общее падение", sigVel:"Скорость падения", sigVelU:"%/мес", sigMonths:"Месяцев на рынке", sigCuts:"Снижений цены", sigLiq:"Ликвидность района", sigLiqU:"дней до продажи", belowMarket:"ниже рынка", valMethod:"Метод", mComparable:"Сравнительный", mIncome:"Доходный", mMixed:"Смешанный", mInsufficient:"Недостаточно данных", aiWhy:"Почему?", aiWhyTitle:"Как рассчитана AI-оценка",
+    catFlip:"Перепродажа", catLet:"Аренда", catLand:"Земля/Участок", catCom:"Коммерческая", catUnclear:"", confH:"Высокая надёжность", confM:"Средняя надёжность", confL:"Низкая надёжность", yieldLbl:"Доходность",
+    searchGo:"Поиск",
+    filtersLbl:"Фильтры и сортировка", favTitle:"Сохранить",
+    photosBtn:"📷 Фото", mapBtn:"📍 Карта", locTitle:"Расположение объекта", locNote:"Карта района через OpenStreetMap — ориентировочное положение по району, не точная точка.", openMap:"Открыть на полной карте",
+    satView:"Спутник", satLandTip:"Для участков спутниковый вид показывает форму, доступ к дороге и окрестности.",
+    clearF:"Сбросить", favView:"Избранное", urgent:"Срочно", noFav:"Вы ещё не сохранили объекты. Нажмите ♡ на интересующих.", cdToday:"Сегодня!", cdTomorrow:"Завтра", cdDays:"через {n} дн.", cdPast:"Завершён",
+    leadBtn:"Мне интересно", leadTitle:"Интерес к объекту", leadName:"Имя", leadEmail:"Email", leadPhone:"Телефон", leadWant:"Что вам нужно?", optLegal:"Юридическая проверка", optFinance:"Финансирование", optValuation:"Оценка стоимости", optBid:"Помощь на аукционе", leadSend:"Отправить", leadOk:"Получено! Мы скоро свяжемся с вами.", leadErr:"Что-то пошло не так — попробуйте ещё раз.", leadPrivacy:"Ваши данные используются только для обработки этого запроса.",
+    alertBtn:"🔔 Уведомления",
+    subTitle:"Не упустите возможность", subText:"Получайте email, как только появится объект по вашим критериям — район, цена, доходность, AI-оценка.", subBtn:"Включить уведомления",
+    bannerText:"Хотите уведомления о новых возможностях?", bannerYes:"Да, уведомляйте", bannerNo:"Не сейчас", exitTitle:"Перед уходом", exitText:"Оставьте email, и мы уведомим вас о подходящей возможности.", exitBtn:"Включить уведомления", exitSkip:"Нет, спасибо", alertTitle:"Уведомления о новых возможностях", alertLead:"Получайте письмо, когда появляется объект по вашим критериям.", alertEmail:"Ваш email", alertWhich:"Уведомлять о:", alertAny:"Любой район", alertAnyType:"Любой тип", alertMaxP:"Цена до €", alertMinScore:"Мин. AI-оценка", alertSub:"Подписаться", alertOk:"Готово! Будете получать уведомления по вашим критериям.", alertPrivacy:"Только для уведомлений. Отписка в один клик в любой момент.",
+    costBtn:"Полная стоимость", calBtn:"Календарь", costTitle:"Оценка полной стоимости", costPrice:"Цена продажи (гипотетическая)", costTransfer:"Сбор за передачу (со скидкой 50%)", costStamp:"Гербовый сбор", costLegal:"Юридические расходы (оценка)", costTotal:"Итого (оценка)", costNote:"Ориентировочный расчёт — точные суммы зависят от НДС, льгот и процедуры. Уточните у юриста.",
+    roiTitle:"Расчёт доходности (ROI)", roiReno:"Стоимость ремонта €", roiRent:"Аренда в месяц €", roiResale:"Цена перепродажи €", roiYield:"Доходность аренды", roiAnnual:"Годовой доход", roiProfit:"Прибыль перепродажи", roiReturn:"Доход на капитал", roiInvested:"Общая инвестиция", calDeposit:"Срок внесения депозита (ориентировочно за 5 дней)", calAuction:"Аукцион",
+    guideLink:"Как участвовать",
+    reportLink:"Отчёт рынка",
+    partnersLink:"Для профессионалов",
+    of:"из", property:"Объект", new:"Новое", drop:"−{n}% от начальной", again:"Повторный",
+    loading:"Загрузка…", emptyH:"Ничего не найдено", emptyP:"Попробуйте смягчить фильтры.",
+    errH:"Данные ещё не созданы",
+    errP:"На GitHub откройте вкладку Actions, выберите рабочий процесс и нажмите Run workflow. Обновите страницу через 2-3 минуты.",
+    foot1:"«Аукционы Кипра» — независимый информационный сервис. Мы не организуем аукционы и не связаны с организаторами.",
+    foot2:"Данные взяты из публичных объявлений и могут содержать ошибки или устареть. Перед любыми действиями проверяйте информацию в официальном источнике:",
+    foot3:"Мы не храним и не отображаем персональные данные.",
+    foot4:"Информация не является инвестиционной, юридической или иной консультацией.",
+    footLegal:"Условия, Конфиденциальность и Право →"
+  },
+  he: {
+    dir:"rtl", locale:"he-IL",
+    eyebrow:"אינדקס עצמאי · מתעדכן מדי יום",
+    title:"מכרזי נדל״ן בקפריסין, בעמוד אחד",
+    sub:"כל המכרזים האלקטרוניים הקרובים של נכסים ממושכנים בקפריסין, עם סינון לפי מחוז, סוג ומחיר — וסימון ברור של הפחתות מחיר.",
+    upcoming:"קרובים", next7:"ב-7 הימים הקרובים", reduced:"במחיר מופחת",
+    totalValue:"שווי כולל", dashAdded:"חדשים היום", dashAddedSub:"נכסים נוספו", dashAvgDisc:"הנחה ממוצעת", dashAvgDiscSub:"בנכסים מוזלים", dashMaxDisc:"ההנחה הגדולה", dashMaxDiscSub:"מהמחיר ההתחלתי", dashActive:"האזור הפעיל", dashTemp:"טמפרטורת השוק",
+    updated:"עודכן לאחרונה", allDistricts:"כל המחוזות", allTypes:"כל הסוגים",
+    maxPrice:"מחיר עד €",
+    fullOwn:"בעלות מלאה בלבד", maxM2:"עד €/m²",
+    minPrice:"מחיר מ-€", catFilter:"קטגוריה", timeFilter:"מתי", time7:"7 הימים הקרובים", time30:"30 הימים הקרובים", onlyDrop:"מחיר מופחת בלבד",
+    lowPrice:"💎 הזדמנות", vacant:"פנוי", oppFilter:"הזדמנויות בלבד (≤€30k)", minYield:"תשואה מינ׳ %", topWeek:"הזדמנויות מובילות", allView:"הכול", mapView:"מפה", noM2:"—", search:"חיפוש: אזור, מלווה, קוד…",
+    sortDate:"הקרובים תחילה", sortPriceAsc:"הזולים תחילה",
+    sortPriceDesc:"היקרים תחילה", sortDrop:"הירידה הגדולה במחיר",
+    sortAI:"ציון AI גבוה", aiDeal:"הזדמנות אפשרית", aiFair:"מחיר הוגן", aiCaution:"דורש זהירות", aiNote:"הערכת AI — לא ייעוץ",
+    aiScore:"ציון AI",
+    estValue:"שווי שוק מוערך",
+    sigTitle:"דינמיקת מחיר",
+    priceHist:"היסטוריית מחיר", similar:"נכסים דומים",
+    unsoldTitle:"סיבות אפשריות לאי-מכירה",unsoldNote:"הערכה על סמך נתונים — לא סיבה מאומתת.", sigDrop:"ירידה כוללת", sigVel:"מהירות ירידה", sigVelU:"%/חודש", sigMonths:"חודשים בשוק", sigCuts:"הפחתות מחיר", sigLiq:"נזילות אזור", sigLiqU:"ימים למכירה", belowMarket:"מתחת לשוק", valMethod:"שיטה", mComparable:"השוואתי", mIncome:"הכנסתי", mMixed:"משולב", mInsufficient:"נתונים חסרים", aiWhy:"למה?", aiWhyTitle:"כיצד חושב ציון ה-AI",
+    catFlip:"שיפוץ ומכירה", catLet:"השכרה", catLand:"קרקע/מגרש", catCom:"מסחרי", catUnclear:"", confH:"אמינות גבוהה", confM:"אמינות בינונית", confL:"אמינות נמוכה", yieldLbl:"תשואה",
+    searchGo:"חיפוש",
+    filtersLbl:"סינון ומיון", favTitle:"שמירה",
+    photosBtn:"📷 תמונות", mapBtn:"📍 מפה", locTitle:"מיקום הנכס", locNote:"מפת אזור דרך OpenStreetMap — מיקום משוער לפי האזור, לא נקודה מדויקת.", openMap:"פתח במפה מלאה",
+    satView:"לוויין", satLandTip:"עבור מגרשים, תצוגת הלוויין מציגה את הצורה, הגישה לכביש והסביבה.",
+    clearF:"ניקוי", favView:"מועדפים", urgent:"דחוף", noFav:"עדיין לא שמרת נכסים. הקישו ♡ על אלה שמעניינים אתכם.", cdToday:"היום!", cdTomorrow:"מחר", cdDays:"בעוד {n} ימים", cdPast:"הסתיים",
+    leadBtn:"אני מעוניין", leadTitle:"התעניינות בנכס", leadName:"שם", leadEmail:"אימייל", leadPhone:"טלפון", leadWant:"מה אתם צריכים?", optLegal:"בדיקה משפטית", optFinance:"מימון", optValuation:"הערכת שווי", optBid:"סיוע במכרז", leadSend:"שליחה", leadOk:"התקבל! ניצור קשר בקרוב.", leadErr:"משהו השתבש — נסו שוב.", leadPrivacy:"הפרטים משמשים רק לטיפול בבקשה זו.",
+    alertBtn:"🔔 התראות",
+    subTitle:"אל תפספסו הזדמנות", subText:"קבלו מייל ברגע שמופיע נכס שתואם לקריטריונים שלכם — אזור, מחיר, תשואה, ציון AI.", subBtn:"הפעלת התראות",
+    bannerText:"רוצים התראות על הזדמנויות חדשות?", bannerYes:"כן, עדכנו אותי", bannerNo:"לא עכשיו", exitTitle:"לפני שאתם עוזבים", exitText:"השאירו אימייל ונעדכן אתכם כשמופיעה הזדמנות מתאימה.", exitBtn:"הפעלת התראות", exitSkip:"לא תודה", alertTitle:"התראות על הזדמנויות חדשות", alertLead:"קבלו מייל כשמופיע נכס שמתאים לקריטריונים שלכם.", alertEmail:"האימייל שלכם", alertWhich:"התריעו לי על:", alertAny:"כל מחוז", alertAnyType:"כל סוג", alertMaxP:"מחיר עד €", alertMinScore:"ציון AI מינימלי", alertSub:"הרשמה", alertOk:"נרשמתם! תקבלו התראות לפי הקריטריונים.", alertPrivacy:"רק להתראות נכסים. ביטול בכל עת בלחיצה אחת.",
+    costBtn:"עלות כוללת", calBtn:"יומן", costTitle:"אומדן עלות כוללת", costPrice:"מחיר סופי (היפותטי)", costTransfer:"אגרות העברה (עם הנחת 50%)", costStamp:"מס בולים", costLegal:"הוצאות משפטיות (אומדן)", costTotal:"סה״כ משוער", costNote:"חישוב אינדיקטיבי — הסכומים תלויים במע״מ, פטורים והליך. יש לאמת עם עורך דין.",
+    roiTitle:"מחשבון תשואה (ROI)", roiReno:"עלות שיפוץ €", roiRent:"שכירות חודשית €", roiResale:"מחיר מכירה חוזרת €", roiYield:"תשואת שכירות", roiAnnual:"הכנסה שנתית", roiProfit:"רווח ממכירה", roiReturn:"תשואה על ההון", roiInvested:"סך השקעה", calDeposit:"מועד אחרון להפקדה (כ-5 ימים לפני)", calAuction:"מכרז",
+    guideLink:"מדריך השתתפות",
+    reportLink:"דו״ח שוק",
+    partnersLink:"לאנשי מקצוע",
+    of:"מתוך", property:"נכס", new:"חדש", drop:"−{n}% מהמחיר ההתחלתי", again:"פרסום חוזר",
+    loading:"טוען…", emptyH:"אין תוצאות", emptyP:"נסו להרחיב את הסינון.",
+    errH:"הנתונים עדיין לא נוצרו",
+    errP:"ב-GitHub פתחו את לשונית Actions, בחרו את התהליך ולחצו Run workflow. רעננו את העמוד בעוד 2-3 דקות.",
+    foot1:"«מכרזי קפריסין» הוא שירות מידע עצמאי. איננו מארגנים מכרזים ואיננו קשורים למארגנים.",
+    foot2:"הנתונים מגיעים מפרסומים ציבוריים ועשויים להכיל שגיאות או להשתנות. לפני כל פעולה, אמתו את המידע במקור הרשמי:",
+    foot3:"איננו שומרים או מציגים מידע אישי.",
+    foot4:"המידע אינו מהווה ייעוץ השקעות, ייעוץ משפטי או ייעוץ אחר.",
+    footLegal:"תנאים, פרטיות ומשפט →"
+  }
+};
+
+/* Μετάφραση τιμών δεδομένων (η πηγή δίνει ελληνικά) */
+const DISTRICTS = {
+  "ΛΕΥΚΩΣΙΑ":{en:"Nicosia",ru:"Никосия",he:"ניקוסיה"},
+  "ΛΕΜΕΣΟΣ":{en:"Limassol",ru:"Лимасол",he:"לימסול"},
+  "ΛΑΡΝΑΚΑ":{en:"Larnaca",ru:"Ларнака",he:"לרנקה"},
+  "ΠΑΦΟΣ":{en:"Paphos",ru:"Пафос",he:"פאפוס"},
+  "ΑΜΜΟΧΩΣΤΟΣ":{en:"Famagusta",ru:"Фамагуста",he:"פמגוסטה"},
+  "ΚΕΡΥΝΕΙΑ":{en:"Kyrenia",ru:"Кирения",he:"קירניה"}
+};
+const TYPES = {
+  "Κατοικία":{en:"House",ru:"Дом",he:"בית"},
+  "Διαμέρισμα":{en:"Apartment",ru:"Квартира",he:"דירה"},
+  "Μεζονέτα":{en:"Maisonette",ru:"Мезонет",he:"דו-קומתי"},
+  "Έπαυλη":{en:"Villa",ru:"Вилла",he:"וילה"},
+  "Οικόπεδο":{en:"Plot",ru:"Участок",he:"מגרש"},
+  "Αγροτεμάχιο":{en:"Agricultural land",ru:"Сельхозземля",he:"קרקע חקלאית"},
+  "Χωράφι":{en:"Field",ru:"Поле",he:"שדה"},
+  "Κατάστημα":{en:"Shop",ru:"Магазин",he:"חנות"},
+  "Γραφείο":{en:"Office",ru:"Офис",he:"משרד"},
+  "Αποθήκη":{en:"Warehouse",ru:"Склад",he:"מחסן"},
+  "Ξενοδοχείο":{en:"Hotel",ru:"Отель",he:"מלון"},
+  "Βιομηχανικό":{en:"Industrial",ru:"Промышленный",he:"תעשייתי"}
+};
+const trValue = (map, v) =>
+  (!v || LANG === "el") ? v : ((map[v] && map[v][LANG]) || v);
+
+/* ============================ ΓΛΩΣΣΑ ============================ */
+function pickLang(){
+  const url = new URLSearchParams(location.search).get("lang");
+  if (url && I18N[url]) return url;
+  try{
+    const saved = localStorage.getItem("lang");
+    if (saved && I18N[saved]) return saved;
+  }catch(e){}
+  const nav = (navigator.language || "el").slice(0,2);
+  return I18N[nav] ? nav : "el";
+}
+let LANG = pickLang();
+let T = I18N[LANG];
+
+function applyLang(){
+  T = I18N[LANG];
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = T.dir;
+  try{ localStorage.setItem("lang", LANG); }catch(e){}
+  for (const el of document.querySelectorAll("[data-t]"))
+    el.textContent = T[el.dataset.t];
+  for (const b of document.querySelectorAll(".langs button"))
+    b.setAttribute("aria-current", b.dataset.lang === LANG);
+  const gl = document.getElementById("guideLink");
+  gl.textContent = T.guideLink;
+  gl.href = "guide.html?lang=" + LANG;
+  const rl = document.getElementById("reportLink");
+  rl.textContent = T.reportLink;
+  const pl = document.getElementById("partnersLink");
+  pl.textContent = T.partnersLink;
+  pl.href = "partners.html?lang=" + LANG;
+  fMax.placeholder = T.maxPrice;
+  const sg = document.getElementById("searchGo"); if (sg) sg.textContent = T.searchGo;
+  const ao = document.getElementById("alertOpen"); if (ao) ao.textContent = T.alertBtn;
+  const ftl = document.getElementById("filterToggleLbl"); if (ftl) ftl.textContent = T.filtersLbl;
+  const st = document.getElementById("subTitle"); if (st) st.textContent = T.subTitle;
+  const sx = document.getElementById("subText"); if (sx) sx.textContent = T.subText;
+  const sb = document.getElementById("subBtn"); if (sb) sb.textContent = T.subBtn;
+  document.getElementById("clearF").textContent = "✕ " + T.clearF;
+  fMaxM2.placeholder = T.maxM2;
+  fMin.placeholder = T.minPrice;
+  fYield.placeholder = T.minYield;
+  document.getElementById("fDropLbl").textContent = T.onlyDrop;
+  fCat.innerHTML = `<option value="">${T.catFilter}</option>` +
+    `<option value="flip">${T.catFlip}</option>` +
+    `<option value="buy_to_let">${T.catLet}</option>` +
+    `<option value="land">${T.catLand}</option>` +
+    `<option value="commercial">${T.catCom}</option>`;
+  fTime.innerHTML = `<option value="">${T.timeFilter}</option>` +
+    `<option value="7">${T.time7}</option>` +
+    `<option value="30">${T.time30}</option>`;
+  document.getElementById("fFullLbl").textContent = T.fullOwn;
+  vAll.textContent = T.allView; vTop.textContent = T.topWeek;
+  vFav.textContent = "♥ " + T.favView; vMap.textContent = T.mapView;
+  fSearch.placeholder = T.search;
+  fSort.innerHTML =
+    `<option value="date">${T.sortDate}</option>
+     <option value="priceAsc">${T.sortPriceAsc}</option>
+     <option value="priceDesc">${T.sortPriceDesc}</option>
+     <option value="drop">${T.sortDrop}</option>
+     <option value="ai">${T.sortAI}</option>`;
+  rebuildSelects();
+  render();
+}
+
+document.getElementById("langs").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (b){ LANG = b.dataset.lang; applyLang(); }
+});
+
+/* ============================ ΔΕΔΟΜΕΝΑ ============================ */
+const fmtEUR = n => n == null ? "—" : "€" + Math.round(n).toLocaleString(T.locale);
+const fmtDate = iso => {
+  if (!iso) return "—";
+  const [y,m,d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+};
+const daysAgo = iso => (Date.now() - new Date(iso)) / 86400000;
+function urgentDays(iso){
+  if(!iso) return false;
+  const d = Math.ceil((new Date(iso) - Date.now())/86400000);
+  return d >= 0 && d <= 3;
+}
+function countdown(iso){
+  if(!iso) return "";
+  const d = Math.ceil((new Date(iso) - Date.now())/86400000);
+  if(d < 0) return T.cdPast;
+  if(d === 0) return T.cdToday;
+  if(d === 1) return T.cdTomorrow;
+  return fmtDate(iso) + " · " + T.cdDays.replace("{n}", d);
+}
+let FAVS = new Set();
+try { FAVS = new Set(JSON.parse(localStorage.getItem("favs")||"[]")); } catch(e){}
+function toggleFav(code){
+  if(FAVS.has(code)) FAVS.delete(code); else FAVS.add(code);
+  try { localStorage.setItem("favs", JSON.stringify([...FAVS])); } catch(e){}
+}
+function fmtCompact(v){
+  if (v >= 1e9) return "€" + (v/1e9).toFixed(1).replace(/\.0$/,"") + "B";
+  if (v >= 1e6) return "€" + (v/1e6).toFixed(1).replace(/\.0$/,"") + "M";
+  if (v >= 1e3) return "€" + Math.round(v/1e3) + "K";
+  return "€" + v;
+}
+function animateStats(){
+  for(const el of document.querySelectorAll("[data-count]")){
+    const target = +el.dataset.count, isMoney = el.dataset.money === "1",
+          dur = 1000, t0 = performance.now();
+    (function step(t){
+      const p = Math.min(1,(t-t0)/dur), v = Math.round(target*(1-Math.pow(1-p,3)));
+      el.textContent = isMoney ? fmtCompact(v) : v.toLocaleString(T.locale);
+      if(p<1) requestAnimationFrame(step);
+    })(t0);
+  }
+}
+
+let DATA = [];
+let loadError = false;
+let VIEW = "all";
+
+async function load(){
+  try{
+    const res = await fetch("data/auctions.json", {cache:"no-store"});
+    if(!res.ok) throw new Error(res.status);
+    const j = await res.json();
+    DATA = j.auctions || [];
+    window.UPDATED = j.updated;
+  }catch(e){
+    loadError = true;
+  }
+  applyLang();
+}
+
+function rebuildSelects(){
+  const keepD = fDistrict.value, keepT = fType.value;
+  const uniq = k => [...new Set(DATA.map(r => r[k]).filter(Boolean))].sort();
+  fDistrict.innerHTML = `<option value="">${T.allDistricts}</option>` +
+    uniq("district").map(d =>
+      `<option value="${d}">${trValue(DISTRICTS, d)}</option>`).join("");
+  fType.innerHTML = `<option value="">${T.allTypes}</option>` +
+    uniq("type").map(t =>
+      `<option value="${t}">${trValue(TYPES, t)}</option>`).join("");
+  fDistrict.value = keepD; fType.value = keepT;
+}
+
+function isFullOwnership(r){
+  // Θεωρούμε "μερίδιο" όταν το AI το σημειώνει ή όταν το κείμενο δείχνει κλάσμα < 1/1
+  const flags = (r.ai?.flags || []).join(" ");
+  if (/μερίδ|share|доля|חלק/i.test(flags)) return false;
+  const t = (r.description || "") + " " + (r.reg_no || "");
+  const m = t.match(/Μερίδιο\s*:?\s*(\d+)\s*\/\s*(\d+)/i);
+  if (m && m[1] !== m[2]) return false;
+  return true;
+}
+function methodLabel(m){return {comparable:T.mComparable,income:T.mIncome,mixed:T.mMixed,insufficient:T.mInsufficient}[m]||"";}
+function catLabel(c){return {flip:T.catFlip,buy_to_let:T.catLet,land:T.catLand,commercial:T.catCom}[c]||"";}
+function confLabel(c){return {high:T.confH,medium:T.confM,low:T.confL}[c]||"";}
+function dropPct(r){
+  if(r.initial_price && r.price && r.price < r.initial_price)
+    return Math.round((1 - r.price / r.initial_price) * 100);
+  return 0;
+}
+
+function renderDash(){
+  const dash = document.getElementById("dash");
+  if (!dash || !DATA.length) { if(dash) dash.innerHTML=""; return; }
+  // Πραγματικά analytics από τα δεδομένα
+  const addedToday = DATA.filter(r => r.first_seen && daysAgo(r.first_seen) === 0).length;
+  const discs = DATA.map(r => dropPct(r)).filter(x => x > 0);
+  const avgDisc = discs.length ? Math.round(discs.reduce((a,b)=>a+b,0)/discs.length) : 0;
+  const maxDisc = discs.length ? Math.max(...discs) : 0;
+  // Πιο ενεργή επαρχία
+  const byD = {};
+  DATA.forEach(r => { if(r.district) byD[r.district] = (byD[r.district]||0)+1; });
+  const topD = Object.entries(byD).sort((a,b)=>b[1]-a[1])[0];
+  // Θερμοκρασία αγοράς: % ακινήτων με AI score 65+
+  const hot = DATA.filter(r => r.ai?.score >= 65).length;
+  const temp = DATA.length ? Math.round(hot/DATA.length*100) : 0;
+  const cards = [
+    {ic:"✦", lbl:T.dashAdded, val:addedToday, sub:T.dashAddedSub},
+    {ic:"▾", lbl:T.dashAvgDisc, val:avgDisc?`${avgDisc}%`:"—", sub:T.dashAvgDiscSub, pos:avgDisc>0},
+    {ic:"◆", lbl:T.dashMaxDisc, val:maxDisc?`−${maxDisc}%`:"—", sub:T.dashMaxDiscSub, pos:maxDisc>0},
+    {ic:"◈", lbl:T.dashActive, val:topD?trValue(DISTRICTS,topD[0]):"—", sub:topD?`${topD[1]} ${T.upcoming.toLowerCase()}`:"", small:true},
+  ];
+  let html = cards.map((c,i) => `<div class="dash-card" style="animation-delay:${i*60}ms">
+    <div class="dc-lbl"><span class="dc-ic">${c.ic}</span>${c.lbl}</div>
+    <div class="dc-val ${c.pos?'pos':''}" style="${c.small?'font-size:19px':''}">${c.val}</div>
+    ${c.sub?`<div class="dc-sub">${c.sub}</div>`:""}
+  </div>`).join("");
+  // Market temperature με μπάρα
+  html += `<div class="dash-card" style="animation-delay:240ms">
+    <div class="dc-lbl"><span class="dc-ic">◉</span>${T.dashTemp}</div>
+    <div class="dc-val">${temp}%</div>
+    <div class="temp-bar"><div class="temp-fill" style="width:${temp}%"></div></div>
+  </div>`;
+  dash.innerHTML = html;
+}
+
+function render(){
+  const list = document.getElementById("list");
+
+  if (loadError){
+    list.innerHTML = `<div class="state"><h2>${T.errH}</h2><p>${T.errP}</p></div>`;
+    document.getElementById("updated").textContent = "";
+    return;
+  }
+  if (window.UPDATED)
+    document.getElementById("updated").textContent = T.updated + ": " +
+      new Date(window.UPDATED).toLocaleString(T.locale,
+        {day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+
+  const q = fSearch.value.trim().toLowerCase();
+  const max = parseFloat(fMax.value) || Infinity;
+  const min = parseFloat(fMin.value) || 0;
+  const maxM2 = parseFloat(fMaxM2.value) || Infinity;
+  const minYield = parseFloat(fYield.value) || 0;
+  const days = parseInt(fTime.value) || 0;
+  const now = Date.now();
+  let rows = DATA.filter(r =>
+    (!fDistrict.value || r.district === fDistrict.value) &&
+    (!fType.value || r.type === fType.value) &&
+    ((r.price ?? 0) <= max) && ((r.price ?? 0) >= min) &&
+    (maxM2 === Infinity || (r.sqm && r.price && (r.price / r.sqm) <= maxM2)) &&
+    (!fCat.value || (r.ai && r.ai.category === fCat.value)) &&
+    (minYield === 0 || (r.ai && r.ai.yield_est && r.ai.yield_est >= minYield)) &&
+    (!days || (r.auction_date && (new Date(r.auction_date) - now) <= days*86400000 && (new Date(r.auction_date) - now) >= -86400000)) &&
+    (!fDrop.checked || dropPct(r) > 0) &&
+    (!fFull.checked || isFullOwnership(r)) &&
+    (!q || [r.municipality, r.district, r.lender, r.code, r.type,
+            r.description, r.reg_no,
+            trValue(DISTRICTS, r.district), trValue(TYPES, r.type)]
+      .join(" ").toLowerCase().includes(q))
+  );
+
+  const s = fSort.value || "date";
+  rows.sort((a,b) =>
+    s === "priceAsc"  ? (a.price ?? 1e12) - (b.price ?? 1e12) :
+    s === "priceDesc" ? (b.price ?? 0) - (a.price ?? 0) :
+    s === "drop"      ? dropPct(b) - dropPct(a) :
+    s === "ai"        ? ((b.ai?.score ?? -1) - (a.ai?.score ?? -1)) :
+    (a.auction_date || "9999") < (b.auction_date || "9999") ? -1 : 1
+  );
+
+  if (VIEW === "top") {
+    rows = rows.filter(r => (r.ai?.score ?? 0) >= 70 || dropPct(r) >= 15)
+               .sort((a,b) => (b.ai?.score ?? 0) - (a.ai?.score ?? 0));
+  } else if (VIEW === "fav") {
+    rows = rows.filter(r => FAVS.has(r.code));
+  }
+  count.textContent = `${rows.length} ${T.of} ${DATA.length}`;
+
+  const week = DATA.filter(r => r.auction_date &&
+    (new Date(r.auction_date) - Date.now()) < 7*86400000 &&
+    (new Date(r.auction_date) - Date.now()) > -86400000).length;
+  const drops = DATA.filter(r => dropPct(r) > 0).length;
+  const totalVal = DATA.reduce((s,r) => s + (r.price || 0), 0);
+  stats.innerHTML = `
+    <div class="s"><b data-count="${DATA.length}">0</b><span>${T.upcoming}</span></div>
+    <div class="s"><b data-count="${Math.round(totalVal)}" data-money="1">0</b><span>${T.totalValue}</span></div>
+    <div class="s"><b data-count="${week}">0</b><span>${T.next7}</span></div>
+    <div class="s"><b data-count="${drops}">0</b><span>${T.reduced}</span></div>`;
+  animateStats();
+  renderDash();
+
+  if(!rows.length){
+    const msg = VIEW === "fav" ? T.noFav : T.emptyP;
+    list.innerHTML = `<div class="state"><h2>${T.emptyH}</h2><p>${msg}</p></div>`;
+    return;
+  }
+
+  list.innerHTML = rows.slice(0, 400).map(r => {
+    const dp = dropPct(r);
+    const isNew = r.first_seen && daysAgo(r.first_seen) <= 7;
+    const loc = [r.municipality, trValue(DISTRICTS, r.district)].filter(Boolean).join(", ");
+    const init = (trValue(TYPES, r.type) || "•").slice(0,2).toUpperCase();
+    const scColor = r.ai ? (r.ai.verdict === "deal" ? "var(--emerald)" :
+      r.ai.verdict === "caution" ? "var(--warn)" : "var(--blue)") : "var(--blue)";
+    const cd = countdown(r.auction_date);
+    const fav = FAVS.has(r.code);
+    const geo = geoFor(r);
+    const banner = geo
+      ? `<img class="banner-img" loading="lazy" alt="${loc}"
+           src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/14/${lat2tile(geo[0],14)}/${lon2tile(geo[1],14)}"
+           onerror="this.style.display='none';this.parentNode.classList.add('no-img')">`
+      : "";
+    return `
+    <a class="card" href="${r.url}" target="_blank" rel="noopener">
+      <button class="fav" data-fav="${r.code}" aria-pressed="${fav}" title="${T.favTitle}">${fav ? "♥" : "♡"}</button>
+      <div class="banner">
+        ${banner}
+        <span class="initials">${init}</span>
+        <span class="type">${trValue(TYPES, r.type) || T.property}</span>
+        ${dp ? `<span class="disc">−${dp}%</span>` : ""}
+      </div>
+      <div class="body">
+        <div class="price-row">
+          <span class="price">${fmtEUR(r.price)}</span>
+          ${r.sqm && r.price ? `<span class="per">${fmtEUR(r.price / r.sqm)}/m²</span>` : ""}
+        </div>
+        <div class="loc">📍 ${loc}</div>
+        <div class="meta">
+          ${r.sqm ? `<span>${Math.round(r.sqm)} m²</span>` : ""}
+          <span>${r.lender || ""}</span>
+        </div>
+        ${cd ? `<div class="when${urgentDays(r.auction_date) ? " urg" : ""}"><span class="dot"></span>${urgentDays(r.auction_date) ? T.urgent + " · " : ""}${cd}</div>` : ""}
+        ${r.ai ? `<div class="score">
+          <div class="ring" style="--v:${r.ai.score};--sc:${scColor}"><i>${r.ai.score}</i></div>
+          <div class="lbl"><b>${T.aiScore} ${r.ai.score}/100</b>
+            <span>${r.ai.verdict === "deal" ? T.aiDeal : r.ai.verdict === "caution" ? T.aiCaution : T.aiFair}</span></div>
+          ${(r.ai.reasons && r.ai.reasons.length) ? `<button class="why-btn" data-code="${r.code}">${T.aiWhy}</button>` : ""}
+        </div>
+        ${r.ai.valuation && r.ai.valuation.market_value_est && r.ai.valuation.discount_pct > 0 ? `
+        <div class="valbox">
+          <span class="valbox-disc">−${r.ai.valuation.discount_pct}%</span>
+          <span class="valbox-txt">${T.belowMarket} · ${T.estValue} ${fmtEUR(r.ai.valuation.market_value_est)}</span>
+        </div>` : ""}` : ""}
+        <div class="badges">
+          ${isNew ? `<span class="badge new">${T.new}</span>` : ""}
+          ${r.price && r.price <= 30000 ? `<span class="badge opp">${T.lowPrice}</span>` : ""}
+          ${(r.features||[]).some(f=>/κενό|ελεύθ|vacant/i.test(f)) ? `<span class="badge vacant">${T.vacant}</span>` : ""}
+          ${r.relistings > 0 ? `<span class="badge again">${T.again}</span>` : ""}
+          ${r.ai && catLabel(r.ai.category) ? `<span class="badge cat">${catLabel(r.ai.category)}</span>` : ""}
+          ${r.ai && r.ai.yield_est ? `<span class="badge yield">${T.yieldLbl} ~${r.ai.yield_est}%</span>` : ""}
+          ${r.ai && r.ai.confidence ? `<span class="conf ${r.ai.confidence}"><span class="d"></span>${confLabel(r.ai.confidence)}</span>` : ""}
+        </div>
+        ${(r.ai?.flags || []).length ? `<div class="flags">${
+          r.ai.flags.slice(0,2).map(f => `<span class="flag">${f}</span>`).join("")}</div>` : ""}
+        ${r.ai?.summary ? `<p class="ai-summary">${r.ai.summary[LANG] || r.ai.summary.el || ""}</p>` : ""}
+        <div class="actions">
+          ${LEAD_ENDPOINT ? `<button class="btn-primary" data-code="${r.code}">${T.leadBtn}</button>` : ""}
+          ${r.price ? `<button class="btn-ghost cost-btn" data-code="${r.code}">${T.costBtn}</button>` : ""}
+          ${r.auction_date ? `<button class="btn-ghost cal-btn" data-code="${r.code}">📅</button>` : ""}
+          <button class="btn-ghost photos-btn" data-url="${r.url}">${T.photosBtn}</button>
+          ${r.district ? `<button class="btn-ghost map-btn" data-code="${r.code}">${T.mapBtn}</button>` : ""}
+        </div>
+      </div>
+    </a>`;
+  }).join("");
+}
+
+
+/* ==================== ΧΑΡΤΗΣ ΤΟΠΟΘΕΣΙΑΣ (OpenStreetMap) ==================== */
+const GEO = {
+  "ΛΕΥΚΩΣΙΑ":[35.1856,33.3823], "ΛΕΜΕΣΟΣ":[34.7071,33.0226],
+  "ΛΑΡΝΑΚΑ":[34.9229,33.6233], "ΠΑΦΟΣ":[34.7720,32.4297],
+  "ΑΜΜΟΧΩΣΤΟΣ":[35.0333,33.9333], "ΚΕΡΥΝΕΙΑ":[35.3417,33.3192]
+};
+// Μερικοί γνωστοί δήμοι για ακριβέστερο κέντρο όταν υπάρχουν στο municipality
+const GEO_TOWN = [
+  ["ΠΑΡΑΛΙΜΝ",[35.0381,33.9823]], ["ΑΓΙΑ ΝΑΠΑ",[34.9880,34.0000]],
+  ["ΓΕΡΜΑΣΟΓΕΙΑ",[34.7180,33.0870]], ["ΑΡΑΔΙΠΠΟΥ",[34.9500,33.5833]],
+  ["ΠΟΛΕΜ",[34.8830,32.5170]], ["ΣΤΡΟΒΟΛ",[35.1370,33.3400]],
+  ["ΛΑΚΑΤΑΜ",[35.1000,33.3167]], ["ΠΟΛΗ",[35.0353,32.4267]]
+];
+function lon2tile(lon, z){ return Math.floor((lon+180)/360*Math.pow(2,z)); }
+function lat2tile(lat, z){
+  const r = lat*Math.PI/180;
+  return Math.floor((1 - Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2*Math.pow(2,z));
+}
+function geoFor(r){
+  const muni = (r.municipality || "").toUpperCase();
+  for (const [k,c] of GEO_TOWN) if (muni.includes(k)) return c;
+  return GEO[r.district] || null;
+}
+function openLocation(code){
+  const r = DATA.find(x => x.code === code);
+  if (!r) return;
+  const c = geoFor(r);
+  if (!c) return;
+  const [lat,lon] = c, dl = 0.06;
+  const bbox = [lon-dl, lat-dl*0.7, lon+dl, lat+dl*0.7].join("%2C");
+  const mapEmbed = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lon}`;
+  const osmFull = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=13/${lat}/${lon}`;
+  // Δορυφορική μέσω Google Maps (νόμιμος σύνδεσμος, ανοίγει στη σελίδα τους)
+  const satLink = `https://www.google.com/maps/@${lat},${lon},600m/data=!3m1!1e3`;
+  const isLand = r.type && /οικοπεδ|χωραφ|αγροτεμ|τεμαχ|γη|κτημα/i.test(
+    r.type.normalize("NFD").replace(/[\u0300-\u036f]/g,""));
+  const loc = [r.municipality, trValue(DISTRICTS, r.district)].filter(Boolean).join(", ");
+  const bg = document.createElement("div");
+  bg.className = "modal-bg";
+  bg.innerHTML = `
+    <div class="modal" style="max-width:560px" role="dialog" aria-modal="true">
+      <h3>${T.locTitle}</h3>
+      <div class="mcode">${loc} · ${code}</div>
+      <iframe title="map" src="${mapEmbed}" style="width:100%;height:300px;border:1px solid var(--line);border-radius:12px;margin-top:6px" loading="lazy"></iframe>
+      <p class="privacy">${T.locNote}</p>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <a class="send" href="${satLink}" target="_blank" rel="noopener" style="text-decoration:none;text-align:center;flex:1">🛰 ${T.satView}</a>
+        <a class="send" href="${osmFull}" target="_blank" rel="noopener" style="text-decoration:none;text-align:center;flex:1;background:var(--card);color:var(--navy);border:1px solid var(--line)">${T.openMap}</a>
+      </div>
+      ${isLand ? `<p class="privacy" style="margin-top:8px">${T.satLandTip}</p>` : ""}
+      <div class="actions"><button class="close" id="mClose">✕</button></div>
+    </div>`;
+  document.body.appendChild(bg);
+  bg.addEventListener("click", e => { if (e.target === bg) bg.remove(); });
+  bg.querySelector("#mClose").onclick = () => bg.remove();
+}
+
+/* ==================== ΕΡΓΑΛΕΙΑ: ΚΟΣΤΟΣ & ΗΜΕΡΟΛΟΓΙΟ ==================== */
+function transferFees(p){
+  // Κλίμακα Κύπρου: 3% έως €85k, 5% €85-170k, 8% άνω των €170k, με 50% μείωση
+  let f = 0;
+  f += Math.min(p, 85000) * 0.03;
+  if (p > 85000)  f += (Math.min(p, 170000) - 85000) * 0.05;
+  if (p > 170000) f += (p - 170000) * 0.08;
+  return f * 0.5;
+}
+function stampDuty(p){
+  let s = Math.min(p, 170000) * 0.0015;
+  if (p > 170000) s += (p - 170000) * 0.002;
+  return Math.min(s, 20000);
+}
+function openCost(code){
+  const r = DATA.find(x => x.code === code);
+  if (!r || !r.price) return;
+  const p = r.price, tf = transferFees(p), sd = stampDuty(p),
+        lg = Math.max(p * 0.01, 800), total = p + tf + sd + lg;
+  const bg = document.createElement("div");
+  bg.className = "modal-bg";
+  bg.innerHTML = `
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3>${T.costTitle}</h3>
+      <div class="mcode">${code}</div>
+      <table class="cost-table">
+        <tr><td>${T.costPrice}</td><td>${fmtEUR(p)}</td></tr>
+        <tr><td>${T.costTransfer}</td><td>${fmtEUR(tf)}</td></tr>
+        <tr><td>${T.costStamp}</td><td>${fmtEUR(sd)}</td></tr>
+        <tr><td>${T.costLegal}</td><td>${fmtEUR(lg)}</td></tr>
+        <tr class="total"><td>${T.costTotal}</td><td>${fmtEUR(total)}</td></tr>
+      </table>
+      <div class="roi">
+        <div class="roi-h">${T.roiTitle}</div>
+        <label>${T.roiReno}</label>
+        <input type="number" id="roiReno" min="0" step="1000" value="0">
+        <label>${T.roiRent}</label>
+        <input type="number" id="roiRent" min="0" step="50" value="${r.ai?.yield_est ? Math.round(p * r.ai.yield_est/100/12) : 0}">
+        <label>${T.roiResale}</label>
+        <input type="number" id="roiResale" min="0" step="1000" value="${r.ai?.valuation?.market_value_est || ""}">
+        <div class="roi-out" id="roiOut"></div>
+      </div>
+      <div class="privacy">${T.costNote}</div>
+      <div class="actions"><button class="close" id="mClose">✕</button></div>
+    </div>`;
+  document.body.appendChild(bg);
+  const baseTotal = total;
+  function calcRoi(){
+    const reno = parseFloat(bg.querySelector("#roiReno").value) || 0;
+    const rent = parseFloat(bg.querySelector("#roiRent").value) || 0;
+    const resale = parseFloat(bg.querySelector("#roiResale").value) || 0;
+    const invested = baseTotal + reno;
+    const out = [];
+    if (rent > 0){
+      const yearly = rent * 12;
+      const grossYield = (yearly / invested) * 100;
+      out.push(`<div><b>${grossYield.toFixed(1)}%</b><span>${T.roiYield}</span></div>`);
+      out.push(`<div><b>${fmtEUR(yearly)}</b><span>${T.roiAnnual}</span></div>`);
+    }
+    if (resale > 0){
+      const profit = resale - invested;
+      const roiPct = (profit / invested) * 100;
+      out.push(`<div><b style="color:${profit>=0?'var(--emerald)':'#C0392B'}">${profit>=0?'+':''}${fmtEUR(profit)}</b><span>${T.roiProfit}</span></div>`);
+      out.push(`<div><b style="color:${roiPct>=0?'var(--emerald)':'#C0392B'}">${roiPct>=0?'+':''}${roiPct.toFixed(0)}%</b><span>${T.roiReturn}</span></div>`);
+    }
+    bg.querySelector("#roiOut").innerHTML = out.length
+      ? `<div class="roi-grid">${out.join("")}</div><div class="roi-inv">${T.roiInvested}: <b>${fmtEUR(invested)}</b></div>`
+      : "";
+  }
+  bg.querySelectorAll("#roiReno,#roiRent,#roiResale").forEach(el =>
+    el.addEventListener("input", calcRoi));
+  calcRoi();
+  bg.addEventListener("click", e => { if (e.target === bg) bg.remove(); });
+  bg.querySelector("#mClose").onclick = () => bg.remove();
+}
+function icsDate(iso, offsetDays=0){
+  const d = new Date(iso); d.setDate(d.getDate() + offsetDays);
+  return d.toISOString().slice(0,10).replace(/-/g,"");
+}
+function downloadICS(code){
+  const r = DATA.find(x => x.code === code);
+  if (!r || !r.auction_date) return;
+  const loc = [r.municipality, r.district].filter(Boolean).join(", ");
+  const ics = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//CyprusAuctions//EL",
+    "BEGIN:VEVENT",
+    "UID:" + code + "-auction",
+    "DTSTART;VALUE=DATE:" + icsDate(r.auction_date),
+    "SUMMARY:" + T.calAuction + " " + code + " — " + loc,
+    "DESCRIPTION:" + (r.url || ""),
+    "BEGIN:VALARM","TRIGGER:-P1D","ACTION:DISPLAY","DESCRIPTION:" + T.calAuction,"END:VALARM",
+    "END:VEVENT",
+    "BEGIN:VEVENT",
+    "UID:" + code + "-deposit",
+    "DTSTART;VALUE=DATE:" + icsDate(r.auction_date, -5),
+    "SUMMARY:⚠ " + T.calDeposit + " — " + code,
+    "END:VEVENT",
+    "END:VCALENDAR"].join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([ics], {type:"text/calendar"}));
+  a.download = "auction-" + code + ".ics";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ============================ LEADS ============================ */
+// Formspree endpoint, π.χ. "https://formspree.io/f/abcdwxyz".
+// Όσο είναι κενό, τα κουμπιά "Ενδιαφέρομαι" δεν εμφανίζονται.
+const LEAD_ENDPOINT = "";
+// Formspree endpoint ΓΙΑ ΕΙΔΟΠΟΙΗΣΕΙΣ (ξεχωριστό). Κενό = δείχνει «σύντομα».
+const ALERT_ENDPOINT = "";
+
+function openAlerts(){
+  const uniq = k => [...new Set(DATA.map(r => r[k]).filter(Boolean))].sort();
+  const dOpts = `<option value="">${T.alertAny}</option>` +
+    uniq("district").map(d => `<option value="${d}">${trValue(DISTRICTS,d)}</option>`).join("");
+  const tOpts = `<option value="">${T.alertAnyType}</option>` +
+    uniq("type").map(t => `<option value="${t}">${trValue(TYPES,t)}</option>`).join("");
+  const bg = document.createElement("div");
+  bg.className = "modal-bg";
+  bg.innerHTML = `
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3>${T.alertTitle}</h3>
+      <p class="privacy" style="margin:2px 0 6px">${T.alertLead}</p>
+      <label>${T.alertWhich}</label>
+      <select id="aDist" style="margin-bottom:8px">${dOpts}</select>
+      <select id="aType" style="margin-bottom:8px">${tOpts}</select>
+      <label>${T.alertMaxP}</label><input id="aMax" type="number" min="0" step="1000">
+      <label>${T.catFilter}</label>
+      <select id="aCat">
+        <option value="">${T.alertAnyType}</option>
+        <option value="flip">${T.catFlip}</option>
+        <option value="buy_to_let">${T.catLet}</option>
+        <option value="land">${T.catLand}</option>
+        <option value="commercial">${T.catCom}</option>
+      </select>
+      <label>${T.alertMinScore}</label><input id="aScore" type="number" min="0" max="100" step="5" placeholder="0">
+      <label>${T.minYield}</label><input id="aYield" type="number" min="0" max="25" step="0.5" placeholder="0">
+      <label class="chk" style="border:none;box-shadow:none;padding:8px 0;background:none"><input type="checkbox" id="aFull"><span>${T.fullOwn}</span></label>
+      <label>${T.alertEmail}</label><input id="aEmail" type="email" autocomplete="email">
+      <div class="actions">
+        <button class="send" id="aSend">${T.alertSub}</button>
+        <button class="close" id="aClose">✕</button>
+      </div>
+      <p class="privacy">${T.alertPrivacy}</p>
+      <div class="msg" id="aMsg"></div>
+    </div>`;
+  document.body.appendChild(bg);
+  const kill = () => bg.remove();
+  bg.addEventListener("click", e => { if (e.target === bg) kill(); });
+  bg.querySelector("#aClose").onclick = kill;
+  bg.querySelector("#aSend").onclick = async () => {
+    const email = bg.querySelector("#aEmail").value.trim();
+    const msg = bg.querySelector("#aMsg");
+    if (!email){ bg.querySelector("#aEmail").focus(); return; }
+    const payload = {
+      type: "alert_subscription", email,
+      district: bg.querySelector("#aDist").value,
+      prop_type: bg.querySelector("#aType").value,
+      max_price: bg.querySelector("#aMax").value,
+      category: bg.querySelector("#aCat").value,
+      min_score: bg.querySelector("#aScore").value,
+      min_yield: bg.querySelector("#aYield").value,
+      full_ownership: bg.querySelector("#aFull").checked,
+      lang: LANG
+    };
+    if (!ALERT_ENDPOINT){
+      msg.style.color = "var(--warn)";
+      msg.textContent = T.soon || "Coming soon";
+      return;
+    }
+    try{
+      const res = await fetch(ALERT_ENDPOINT, {method:"POST",
+        headers:{"Content-Type":"application/json","Accept":"application/json"},
+        body: JSON.stringify(payload)});
+      if(!res.ok) throw new Error(res.status);
+      msg.style.color = "var(--emerald)";
+      msg.textContent = T.alertOk;
+      setTimeout(kill, 2500);
+    }catch(e){
+      msg.style.color = "#B91C1C";
+      msg.textContent = T.leadErr;
+    }
+  };
+}
+
+function openLead(code){
+  const bg = document.createElement("div");
+  bg.className = "modal-bg";
+  bg.innerHTML = `
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3>${T.leadTitle}</h3>
+      <div class="mcode">${code}</div>
+      <label>${T.leadWant}</label>
+      <select id="mWant">
+        <option value="legal">${T.optLegal}</option>
+        <option value="finance">${T.optFinance}</option>
+        <option value="valuation">${T.optValuation}</option>
+        <option value="bid">${T.optBid}</option>
+      </select>
+      <label>${T.leadName}</label><input id="mName" autocomplete="name">
+      <label>${T.leadEmail}</label><input id="mEmail" type="email" autocomplete="email">
+      <label>${T.leadPhone}</label><input id="mPhone" type="tel" autocomplete="tel">
+      <div class="actions">
+        <button class="send" id="mSend">${T.leadSend}</button>
+        <button class="close" id="mClose">✕</button>
+      </div>
+      <div class="privacy">${T.leadPrivacy}</div>
+      <div class="msg" id="mMsg"></div>
+    </div>`;
+  document.body.appendChild(bg);
+  const kill = () => bg.remove();
+  bg.addEventListener("click", e => { if (e.target === bg) kill(); });
+  bg.querySelector("#mClose").onclick = kill;
+  bg.querySelector("#mSend").onclick = async () => {
+    const email = bg.querySelector("#mEmail").value.trim();
+    if (!email) { bg.querySelector("#mEmail").focus(); return; }
+    const msg = bg.querySelector("#mMsg");
+    try{
+      const res = await fetch(LEAD_ENDPOINT, {
+        method: "POST",
+        headers: {"Content-Type": "application/json", "Accept": "application/json"},
+        body: JSON.stringify({
+          property_code: code,
+          service: bg.querySelector("#mWant").value,
+          name: bg.querySelector("#mName").value.trim(),
+          email, phone: bg.querySelector("#mPhone").value.trim(),
+          lang: LANG, page: location.href
+        })
+      });
+      if (!res.ok) throw new Error(res.status);
+      msg.style.color = "var(--pine)";
+      msg.textContent = T.leadOk;
+      setTimeout(kill, 2500);
+    }catch(e){
+      msg.style.color = "#8A3B32";
+      msg.textContent = T.leadErr;
+    }
+  };
+}
+
+function openWhy(code){
+  const r = DATA.find(x => x.code === code);
+  if (!r || !r.ai) return;
+  const v = r.ai.verdict === "deal" ? T.aiDeal : r.ai.verdict === "caution" ? T.aiCaution : T.aiFair;
+  const bg = document.createElement("div");
+  bg.className = "modal-bg";
+  bg.innerHTML = `
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3>${T.aiWhyTitle}</h3>
+      <div class="mcode">${code}</div>
+      <div class="why-score">${r.ai.score}/100</div>
+      <div class="why-verdict">${v}${r.ai.confidence ? " · " + confLabel(r.ai.confidence) : ""}${catLabel(r.ai.category) ? " · " + catLabel(r.ai.category) : ""}${r.ai.yield_est ? " · " + T.yieldLbl + " ~" + r.ai.yield_est + "%" : ""}</div>
+      ${r.ai.valuation && r.ai.valuation.market_value_est ? `<div style="background:var(--emerald-soft);border-radius:10px;padding:10px 12px;margin:4px 0 8px;font-size:13px">
+        <b>${T.estValue}: ${fmtEUR(r.ai.valuation.market_value_est)}</b>${r.ai.valuation.discount_pct > 0 ? ` · <span style="color:var(--emerald);font-weight:700">−${r.ai.valuation.discount_pct}% ${T.belowMarket}</span>` : ""}${r.ai.valuation.method ? `<br><span style="color:var(--muted);font-size:12px">${T.valMethod}: ${methodLabel(r.ai.valuation.method)}</span>` : ""}
+      </div>` : ""}
+      <ul class="why-list">${(r.ai.reasons||[]).map(x=>`<li>${x}</li>`).join("")}</ul>
+      ${r.ai.signals ? `<div class="sig-box">
+        <div class="sig-h">${T.sigTitle}</div>
+        <div class="sig-grid">
+          ${r.ai.signals["συνολική_πτώση_%"] ? `<div><b>−${r.ai.signals["συνολική_πτώση_%"]}%</b><span>${T.sigDrop}</span></div>` : ""}
+          ${r.ai.signals["ταχύτητα_πτώσης_%_ανά_μήνα"] ? `<div><b>${r.ai.signals["ταχύτητα_πτώσης_%_ανά_μήνα"]}</b><span>${T.sigVel} (${T.sigVelU})</span></div>` : ""}
+          ${r.ai.signals["μήνες_στην_αγορά"] ? `<div><b>${r.ai.signals["μήνες_στην_αγορά"]}</b><span>${T.sigMonths}</span></div>` : ""}
+          ${r.ai.signals["φορές_μείωσης_τιμής"] ? `<div><b>${r.ai.signals["φορές_μείωσης_τιμής"]}</b><span>${T.sigCuts}</span></div>` : ""}
+        </div></div>` : ""}
+      ${r.ai.unsold && r.ai.unsold.length ? `<div class="unsold-box">
+        <div class="unsold-h">⟳ ${T.unsoldTitle}</div>
+        <ul>${r.ai.unsold.map(x=>`<li>${x}</li>`).join("")}</ul>
+        <p class="unsold-note">${T.unsoldNote}</p>
+      </div>` : ""}
+      ${(r.ai.flags||[]).length ? `<ul class="why-list">${r.ai.flags.map(f=>`<li style="color:#8A3B32">⚠ ${f}</li>`).join("")}</ul>` : ""}
+      ${priceHistoryChart(r)}
+      ${similarProperties(r)}
+      <div class="privacy">${T.aiNote}</div>
+      <div class="actions"><button class="close" id="mClose">✕</button></div>
+    </div>`;
+  document.body.appendChild(bg);
+  bg.addEventListener("click", e => { if (e.target === bg) bg.remove(); });
+  bg.querySelector("#mClose").onclick = () => bg.remove();
+  bg.querySelectorAll(".sim-item").forEach(el =>
+    el.addEventListener("click", () => {
+      bg.remove();
+      const code = el.dataset.code;
+      const t = DATA.find(x => x.code === code);
+      if (t) openWhy(code);
+    }));
+}
+
+function priceHistoryChart(r){
+  const h = r.history || [];
+  if (h.length < 2) return "";
+  const prices = h.map(s => s.p).filter(Boolean);
+  if (prices.length < 2) return "";
+  const min = Math.min(...prices), max = Math.max(...prices);
+  const range = max - min || 1;
+  const W = 280, H = 70, pad = 6;
+  const pts = h.filter(s=>s.p).map((s,i,arr) => {
+    const x = pad + (i/(arr.length-1)) * (W - pad*2);
+    const y = pad + (1 - (s.p - min)/range) * (H - pad*2);
+    return [x,y];
+  });
+  const path = pts.map((p,i) => `${i?"L":"M"}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(" ");
+  const area = path + ` L${pts[pts.length-1][0].toFixed(1)} ${H-pad} L${pts[0][0].toFixed(1)} ${H-pad} Z`;
+  const first = prices[0], last = prices[prices.length-1];
+  const dropPct = first > last ? Math.round((1-last/first)*100) : 0;
+  return `<div class="ph-box">
+    <div class="ph-h">${T.priceHist}${dropPct ? ` <span style="color:var(--emerald)">−${dropPct}%</span>` : ""}</div>
+    <svg viewBox="0 0 ${W} ${H}" class="ph-svg">
+      <path d="${area}" fill="url(#phg)" opacity="0.15"/>
+      <path d="${path}" fill="none" stroke="var(--emerald)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      ${pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.5" fill="var(--emerald)"/>`).join("")}
+      <defs><linearGradient id="phg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--emerald)"/><stop offset="1" stop-color="var(--emerald)" stop-opacity="0"/></linearGradient></defs>
+    </svg>
+    <div class="ph-ends"><span>${fmtEUR(first)}</span><span>${fmtEUR(last)}</span></div>
+  </div>`;
+}
+
+function similarProperties(r){
+  if (!r.district) return "";
+  const cls = t => {
+    const x = (t||"").toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+    if (/ΔΙΑΜΕΡ|STUDIO|ΓΚΑΡΣ/.test(x)) return "a";
+    if (/ΚΑΤΟΙΚ|ΟΙΚΙΑ|ΜΕΖΟΝ|ΒΙΛΑ/.test(x)) return "h";
+    if (/ΟΙΚΟΠΕΔ|ΧΩΡΑΦ|ΑΓΡΟΤΕΜ|ΓΗ/.test(x)) return "l";
+    if (/ΚΑΤΑΣΤ|ΓΡΑΦΕΙ|ΑΠΟΘΗΚ/.test(x)) return "c";
+    return "o";
+  };
+  const myCls = cls(r.type);
+  const sims = DATA.filter(x => x.code !== r.code && x.district === r.district
+    && cls(x.type) === myCls && x.price)
+    .sort((a,b) => Math.abs((a.price||0)-(r.price||0)) - Math.abs((b.price||0)-(r.price||0)))
+    .slice(0,3);
+  if (!sims.length) return "";
+  return `<div class="sim-box">
+    <div class="sim-h">${T.similar}</div>
+    ${sims.map(s => `<div class="sim-item" data-code="${s.code}">
+      <div class="sim-t">${trValue(TYPES, s.type) || T.property}</div>
+      <div class="sim-meta">${s.municipality||s.district}${s.sqm?` · ${Math.round(s.sqm)}m²`:""}</div>
+      <div class="sim-price">${fmtEUR(s.price)}${s.ai?.score?` · AI ${s.ai.score}`:""}</div>
+    </div>`).join("")}
+  </div>`;
+}
+
+const _sg = document.getElementById("searchGo"); if (_sg) _sg.addEventListener("click", () => render());
+const _ao = document.getElementById("alertOpen"); if (_ao) _ao.addEventListener("click", openAlerts);
+// Theme toggle (dark/light) με μνήμη
+(function(){
+  const btn = document.getElementById("themeBtn");
+  const root = document.documentElement;
+  let saved;
+  try { saved = localStorage.getItem("theme"); } catch(e){}
+  if (saved === "dark" || (!saved && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)){
+    root.setAttribute("data-theme","dark");
+  }
+  const sync = () => { if(btn) btn.textContent = root.getAttribute("data-theme")==="dark" ? "☀" : "◐"; };
+  sync();
+  if (btn) btn.addEventListener("click", () => {
+    const dark = root.getAttribute("data-theme")==="dark";
+    if (dark) root.removeAttribute("data-theme"); else root.setAttribute("data-theme","dark");
+    try { localStorage.setItem("theme", dark ? "light" : "dark"); } catch(e){}
+    sync();
+  });
+})();
+const _sb = document.getElementById("subBtn");
+if (_sb) _sb.addEventListener("click", () => openAlerts());
+const _ft = document.getElementById("filterToggle");
+if (_ft) _ft.addEventListener("click", () => {
+  document.getElementById("toolbar").classList.toggle("open");
+});
+document.getElementById("clearF").addEventListener("click", () => {
+  fDistrict.value = ""; fType.value = ""; fMax.value = ""; fMin.value = ""; fMaxM2.value = "";
+  fCat.value = ""; fTime.value = ""; fYield.value = ""; fDrop.checked = false;
+  fFull.checked = false; fSearch.value = ""; fSort.value = "date";
+  render();
+});
+document.getElementById("list").addEventListener("click", e => {
+  const fav = e.target.closest(".fav");
+  if (fav){ e.preventDefault(); e.stopPropagation(); toggleFav(fav.dataset.fav);
+    const on = FAVS.has(fav.dataset.fav);
+    fav.setAttribute("aria-pressed", on); fav.textContent = on ? "♥" : "♡"; return; }
+  const w = e.target.closest(".why-btn");
+  if (w){ e.preventDefault(); e.stopPropagation(); openWhy(w.dataset.code); return; }
+  const ph = e.target.closest(".photos-btn");
+  if (ph){ e.preventDefault(); e.stopPropagation();
+    window.open(ph.dataset.url, "_blank", "noopener"); return; }
+  const b = e.target.closest(".lead-btn, .cost-btn, .cal-btn, .map-btn");
+  if (!b) return;
+  e.preventDefault(); e.stopPropagation();
+  if (b.classList.contains("lead-btn")) openLead(b.dataset.code);
+  else if (b.classList.contains("cost-btn")) openCost(b.dataset.code);
+  else if (b.classList.contains("map-btn")) openLocation(b.dataset.code);
+  else downloadICS(b.dataset.code);
+});
+
+/* ==================== ΧΑΡΤΗΣ (Leaflet — πραγματικός χάρτης) ==================== */
+function scoreColor(avg){
+  return avg >= 65 ? "#18B67A" : avg >= 50 ? "#2D7FF9" : "#9AA3A0";
+}
+let _map = null, _markers = [];
+function districtTiles(){
+  // Εναλλακτική προβολή (χωρίς εξωτερικό χάρτη): κομψά πλακίδια ανά επαρχία
+  const byD = {};
+  for (const r of DATA){
+    const d = r.district; if (!d) continue;
+    const g = byD[d] || (byD[d] = {n:0, s:0, sc:0});
+    g.n++; if (r.ai?.score){ g.s += r.ai.score; g.sc++; }
+  }
+  const items = Object.entries(byD).sort((a,b) => b[1].n - a[1].n).map(([d,g]) => {
+    const avg = g.sc ? Math.round(g.s / g.sc) : 0;
+    return `<button class="dtile" data-d="${d}">
+      <span class="dt-top">
+        <span class="dt-dot" style="background:${scoreColor(avg)}"></span>
+        <span class="dt-name">${trValue(DISTRICTS, d)}</span>
+      </span>
+      <span class="dt-bottom">
+        <span><span class="dt-n">${g.n}</span> <span class="dt-nlbl">${T.upcoming}</span></span>
+        ${avg ? `<span class="dt-ai">AI ${avg}</span>` : ""}
+      </span>
+    </button>`;
+  }).join("");
+  const wrap = document.getElementById("mapWrap");
+  wrap.innerHTML = `<div class="cy-map"><div class="dtiles">${items}</div>
+    <div class="cy-legend">
+      <span><i style="background:#18B67A"></i>${T.topWeek} (AI 65+)</span>
+      <span><i style="background:#2D7FF9"></i>AI 50-64</span>
+      <span><i style="background:#9AA3A0"></i>AI &lt;50 / —</span>
+    </div></div>`;
+  wrap.querySelectorAll(".dtile").forEach(b =>
+    b.addEventListener("click", () => {
+      fDistrict.value = b.dataset.d; setView("all"); render();
+      document.getElementById("list").scrollIntoView({ behavior: "smooth" });
+    }));
+}
+function renderMap(){
+  const wrap = document.getElementById("mapWrap");
+  // Αν το Leaflet δεν είναι διαθέσιμο (π.χ. χωρίς ίντερνετ), δείξε πλακίδια
+  if (typeof L === "undefined"){
+    districtTiles();
+    return;
+  }
+  if (!wrap.querySelector("#leaflet")){
+    wrap.innerHTML = `<div class="cy-map">
+      <div id="leaflet" style="height:440px;border-radius:14px;overflow:hidden"></div>
+      <div class="cy-legend">
+        <span><i style="background:#18B67A"></i>${T.topWeek} (AI 65+)</span>
+        <span><i style="background:#2D7FF9"></i>AI 50-64</span>
+        <span><i style="background:#9AA3A0"></i>AI &lt;50 / —</span>
+      </div></div>`;
+  }
+  if (!_map){
+    _map = L.map("leaflet", { scrollWheelZoom: false, attributionControl: true })
+      .setView([34.95, 33.2], 8);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18, attribution: "© OpenStreetMap"
+    }).addTo(_map);
+  }
+  // Καθάρισμα προηγούμενων σημείων
+  _markers.forEach(m => _map.removeLayer(m));
+  _markers = [];
+
+  // Ομαδοποίηση ανά επαρχία: πλήθος + μέσο AI
+  const byD = {};
+  for (const r of DATA){
+    const d = r.district; if (!GEO[d]) continue;
+    const g = byD[d] || (byD[d] = {n:0, s:0, sc:0});
+    g.n++; if (r.ai?.score){ g.s += r.ai.score; g.sc++; }
+  }
+  const maxN = Math.max(1, ...Object.values(byD).map(g => g.n));
+  const bounds = [];
+  for (const [d,g] of Object.entries(byD)){
+    const [lat,lon] = GEO[d];
+    const avg = g.sc ? Math.round(g.s / g.sc) : 0;
+    const rad = 14 + 22 * Math.sqrt(g.n / maxN);
+    const nm = trValue(DISTRICTS, d);
+    const marker = L.circleMarker([lat,lon], {
+      radius: rad, fillColor: scoreColor(avg), color: "#fff",
+      weight: 2, fillOpacity: 0.85
+    }).addTo(_map);
+    marker.bindTooltip(`<b>${nm}</b>: ${g.n}${avg? " · AI "+avg:""}`,
+      { direction: "top" });
+    // Ετικέτα με τον αριθμό πάνω στο σημείο
+    const label = L.marker([lat,lon], {
+      icon: L.divIcon({
+        className: "cy-count",
+        html: `<span style="color:#fff;font-weight:700;font-size:13px;
+          font-family:'IBM Plex Mono',monospace">${g.n}</span>`,
+        iconSize: [30,30], iconAnchor: [15,15]
+      }), interactive: false
+    }).addTo(_map);
+    marker.on("click", () => {
+      fDistrict.value = d; setView("all"); render();
+      document.getElementById("list").scrollIntoView({ behavior: "smooth" });
+    });
+    _markers.push(marker, label);
+    bounds.push([lat,lon]);
+  }
+  if (bounds.length){
+    _map.fitBounds(bounds, { padding: [50,50], maxZoom: 9 });
+  }
+  // Το Leaflet χρειάζεται invalidateSize όταν το container ήταν κρυμμένο
+  setTimeout(() => _map && _map.invalidateSize(), 60);
+}
+
+/* ==================== VIEW TOGGLE ==================== */
+function setView(v){
+  VIEW = v;
+  for (const b of document.querySelectorAll("#views button"))
+    b.setAttribute("aria-current", b.dataset.view === v);
+  const showMap = v === "map";
+  document.getElementById("mapWrap").style.display = showMap ? "block" : "none";
+  document.getElementById("list").style.display = showMap ? "none" : "block";
+  if (showMap) renderMap();
+}
+document.getElementById("views").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (b){ setView(b.dataset.view); if (b.dataset.view !== "map") render(); }
+});
+
+for(const el of [fDistrict, fType, fMax, fMin, fMaxM2, fCat, fTime, fYield, fSort, fSearch])
+  el.addEventListener("input", render);
+fFull.addEventListener("change", render);
+fDrop.addEventListener("change", render);
+load();
+</script>
+</body>
+</html>

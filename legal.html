@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Όροι, Απόρρητο & Νομικά — Cyprus Auctions</title>
+<meta name="description" content="Όροι χρήσης, πολιτική απορρήτου (GDPR) και δήλωση ανεξαρτησίας του Cyprus Auctions.">
+<meta name="robots" content="index,follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Frank+Ruhl+Libre:wght@500;700&family=Noto+Sans+Hebrew:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F7F6F1;--ink:#1B2624;--pine:#17453F;--pine-soft:#EAF0EE;
+    --copper-ink:#8A4A17;--line:#D6D3C8;--muted:#565F5C;
+    --serif:'Literata','Frank Ruhl Libre',serif;
+    --sans:'Inter','Noto Sans Hebrew',system-ui,sans-serif;
+    --mono:'IBM Plex Mono',monospace}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{color-scheme:light only}
+  body{background:var(--paper)!important;color:var(--ink)!important;
+    font-family:var(--sans);font-size:15.5px;line-height:1.62}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px}
+  header{border-bottom:1px solid var(--line);padding:24px 0 20px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+  .back{font-size:13.5px;font-weight:600;color:var(--pine);text-decoration:none}
+  .langs{display:flex;gap:4px}
+  .langs button{font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;background:none;
+    border:1px solid transparent;border-radius:7px;padding:4px 9px;color:#39423F}
+  .langs button[aria-current=true]{border-color:var(--line);background:#fff;color:var(--ink)}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(24px,4.2vw,34px);
+    line-height:1.15;color:#131D1B}
+  .sub{color:var(--muted);margin-top:8px}
+  main{padding:26px 0 40px}
+  h2{font-family:var(--serif);font-size:21px;margin:32px 0 12px;color:#131D1B}
+  h3{font-size:15.5px;margin:18px 0 6px;color:#131D1B}
+  p{margin-bottom:12px;color:#2A3330}
+  ul{margin:0 0 12px 20px}
+  li{margin-bottom:7px;color:#2A3330}
+  .draft{background:#FFF7ED;border:1px solid #FCD9A8;border-radius:10px;
+    padding:14px 16px;margin-bottom:8px;font-size:13.5px;color:#7A4A1A}
+  .draft b{color:#9A5B1E}
+  .upd{font-size:13px;color:var(--muted);font-style:italic;margin-top:6px}
+  a{color:var(--pine)}
+  footer{border-top:1px solid var(--line);padding:22px 0;font-size:13px;color:var(--muted)}
+  [dir=rtl]{text-align:right}
+  [dir=rtl] ul{margin:0 20px 12px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back" href="index.html" id="back"></a>
+      <div class="langs" id="langs">
+        <button data-l="el" aria-current="true">ΕΛ</button>
+        <button data-l="en">EN</button>
+        <button data-l="ru">RU</button>
+        <button data-l="he">עב</button>
+      </div>
+    </div>
+    <h1 id="title"></h1>
+    <p class="sub" id="sub"></p>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <div class="draft" id="draftNote"></div>
+
+    <h2 id="s1h"></h2>
+    <div id="s1"></div>
+
+    <h2 id="s2h"></h2>
+    <div id="s2"></div>
+
+    <h2 id="s3h"></h2>
+    <div id="s3"></div>
+
+    <p class="upd" id="updated"></p>
+  </div>
+</main>
+<footer><div class="wrap"><span id="foot"></span></div></footer>
+
+<script>
+const G = {
+ el:{dir:"ltr",back:"← Πίσω στους πλειστηριασμούς",
+   title:"Όροι, Απόρρητο & Νομικά",
+   sub:"Διαβάστε προσεκτικά πριν χρησιμοποιήσετε την υπηρεσία.",
+   draftNote:"<b>Σημείωση:</b> Το παρόν κείμενο είναι αρχικό προσχέδιο και δεν αποτελεί νομική συμβουλή. Πρέπει να ελεγχθεί και να εγκριθεί από δικηγόρο πριν τεθεί σε ισχύ.",
+   s1h:"1. Όροι Χρήσης",
+   s1:`<p>Το Cyprus Auctions είναι ανεξάρτητη ενημερωτική υπηρεσία που συγκεντρώνει και παρουσιάζει δημόσια διαθέσιμες πληροφορίες για πλειστηριασμούς ακινήτων στην Κύπρο, με πηγή τον επίσημο ιστότοπο πλειστηριασμών.</p>
+   <h3>Χαρακτήρας των πληροφοριών</h3>
+   <p>Όλα τα στοιχεία παρέχονται «ως έχουν», για γενική ενημέρωση. Δεν εγγυόμαστε την ακρίβεια, πληρότητα ή επικαιρότητά τους. Οι επίσημες και δεσμευτικές πληροφορίες βρίσκονται πάντα στην επίσημη πηγή του κάθε πλειστηριασμού, στην οποία παραπέμπουμε.</p>
+   <h3>Εκτιμήσεις τεχνητής νοημοσύνης</h3>
+   <p>Οι βαθμολογίες, εκτιμήσεις αξίας, αποδόσεις, «πιθανοί λόγοι» και κάθε ανάλυση που παράγεται αυτόματα είναι <b>ενδεικτικές και μόνο</b>. Δεν αποτελούν επαγγελματική εκτίμηση, επενδυτική, νομική ή χρηματοοικονομική συμβουλή, ούτε εγγύηση αποτελέσματος. Είναι υπολογισμοί βασισμένοι σε περιορισμένα δεδομένα και ενδέχεται να περιέχουν σφάλματα.</p>
+   <h3>Ευθύνη χρήστη</h3>
+   <p>Πριν από οποιαδήποτε απόφαση ή συμμετοχή σε πλειστηριασμό, οφείλετε να επαληθεύσετε ανεξάρτητα κάθε στοιχείο και να συμβουλευτείτε αδειούχους επαγγελματίες (δικηγόρο, εκτιμητή). Κάθε απόφαση και ενέργειά σας γίνεται με δική σας αποκλειστική ευθύνη.</p>
+   <h3>Περιορισμός ευθύνης</h3>
+   <p>Στον μέγιστο βαθμό που επιτρέπει ο νόμος, δεν φέρουμε ευθύνη για οποιαδήποτε ζημία, απώλεια ή δαπάνη προκύψει από τη χρήση της υπηρεσίας ή την εμπιστοσύνη στις πληροφορίες της.</p>`,
+   s2h:"2. Πολιτική Απορρήτου (GDPR)",
+   s2:`<p>Σεβόμαστε τα προσωπικά σας δεδομένα και συμμορφωνόμαστε με τον Γενικό Κανονισμό Προστασίας Δεδομένων (GDPR).</p>
+   <h3>Τι δεδομένα συλλέγουμε</h3>
+   <ul>
+   <li>Το email σας, εάν εγγραφείτε για ειδοποιήσεις.</li>
+   <li>Τα στοιχεία που υποβάλλετε εσείς οικειοθελώς (όνομα, email, τηλέφωνο) όταν δηλώνετε ενδιαφέρον για ακίνητο ή επικοινωνείτε μαζί μας.</li>
+   </ul>
+   <h3>Τι ΔΕΝ συλλέγουμε</h3>
+   <p>Δεν αποθηκεύουμε ονόματα οφειλετών ή άλλα προσωπικά δεδομένα τρίτων από τα έγγραφα των πλειστηριασμών. Επεξεργαζόμαστε μόνο δεδομένα ακινήτων (τοποθεσία, τιμή, χαρακτηριστικά).</p>
+   <h3>Πώς τα χρησιμοποιούμε</h3>
+   <p>Χρησιμοποιούμε τα στοιχεία σας αποκλειστικά για να σας εξυπηρετήσουμε — να σας στέλνουμε ειδοποιήσεις που ζητήσατε ή να προωθήσουμε το αίτημά σας σε συνεργαζόμενο επαγγελματία. Δεν πουλάμε τα δεδομένα σας.</p>
+   <h3>Τα δικαιώματά σας</h3>
+   <p>Έχετε δικαίωμα πρόσβασης, διόρθωσης και διαγραφής των δεδομένων σας. Για οποιοδήποτε αίτημα, επικοινωνήστε στο <a href="mailto:info@cyprusauctions.com">info@cyprusauctions.com</a>.</p>`,
+   s3h:"3. Δήλωση Ανεξαρτησίας",
+   s3:`<p>Το Cyprus Auctions είναι <b>ανεξάρτητη</b> υπηρεσία. Δεν είμαστε συνδεδεμένοι, εξουσιοδοτημένοι ή υποστηριζόμενοι από τον επίσημο φορέα πλειστηριασμών, από τράπεζες, διαχειριστές δανείων ή κρατικές αρχές.</p>
+   <p>Δεν διοργανώνουμε πλειστηριασμούς και δεν είμαστε κτηματομεσίτες. Λειτουργούμε αποκλειστικά ως ενημερωτικός συγκεντρωτής δημόσιων πληροφοριών, παραπέμποντας πάντα στην επίσημη πηγή.</p>`,
+   updated:"Τελευταία ενημέρωση: 13/07/2026",
+   foot:"© Cyprus Auctions — Ανεξάρτητη ενημερωτική υπηρεσία."},
+
+ en:{dir:"ltr",back:"← Back to auctions",
+   title:"Terms, Privacy & Legal",
+   sub:"Please read carefully before using the service.",
+   draftNote:"<b>Note:</b> This text is an initial draft and does not constitute legal advice. It must be reviewed and approved by a lawyer before taking effect.",
+   s1h:"1. Terms of Use",
+   s1:`<p>Cyprus Auctions is an independent information service that aggregates and presents publicly available information about property auctions in Cyprus, sourced from the official auctions website.</p>
+   <h3>Nature of the information</h3>
+   <p>All data is provided "as is", for general information. We do not guarantee its accuracy, completeness or timeliness. The official and binding information is always at the original source of each auction, to which we link.</p>
+   <h3>Artificial-intelligence estimates</h3>
+   <p>Scores, value estimates, yields, "possible reasons" and any automatically generated analysis are <b>indicative only</b>. They are not a professional valuation, investment, legal or financial advice, nor a guarantee of outcome. They are calculations based on limited data and may contain errors.</p>
+   <h3>User responsibility</h3>
+   <p>Before any decision or participation in an auction, you must independently verify every detail and consult licensed professionals (lawyer, valuer). Every decision and action you take is at your sole responsibility.</p>
+   <h3>Limitation of liability</h3>
+   <p>To the maximum extent permitted by law, we bear no liability for any damage, loss or cost arising from the use of the service or reliance on its information.</p>`,
+   s2h:"2. Privacy Policy (GDPR)",
+   s2:`<p>We respect your personal data and comply with the General Data Protection Regulation (GDPR).</p>
+   <h3>What data we collect</h3>
+   <ul>
+   <li>Your email, if you subscribe to alerts.</li>
+   <li>Details you voluntarily submit (name, email, phone) when expressing interest in a property or contacting us.</li>
+   </ul>
+   <h3>What we do NOT collect</h3>
+   <p>We do not store debtors' names or other third-party personal data from auction documents. We process only property data (location, price, characteristics).</p>
+   <h3>How we use it</h3>
+   <p>We use your details solely to serve you — to send alerts you requested or forward your request to a partner professional. We do not sell your data.</p>
+   <h3>Your rights</h3>
+   <p>You have the right to access, correct and delete your data. For any request, contact <a href="mailto:info@cyprusauctions.com">info@cyprusauctions.com</a>.</p>`,
+   s3h:"3. Independence Statement",
+   s3:`<p>Cyprus Auctions is an <b>independent</b> service. We are not affiliated with, authorised or endorsed by the official auctions body, banks, loan servicers or state authorities.</p>
+   <p>We do not organise auctions and we are not real-estate agents. We operate solely as an information aggregator of public data, always linking to the official source.</p>`,
+   updated:"Last updated: 13/07/2026",
+   foot:"© Cyprus Auctions — Independent information service."},
+
+ ru:{dir:"ltr",back:"← Назад к аукционам",
+   title:"Условия, Конфиденциальность и Право",
+   sub:"Пожалуйста, внимательно прочитайте перед использованием.",
+   draftNote:"<b>Примечание:</b> Этот текст является черновиком и не является юридической консультацией. Перед вступлением в силу он должен быть проверен и одобрен юристом.",
+   s1h:"1. Условия использования",
+   s1:`<p>Cyprus Auctions — независимый информационный сервис, который собирает и представляет общедоступную информацию об аукционах недвижимости на Кипре из официального сайта аукционов.</p>
+   <h3>Характер информации</h3>
+   <p>Все данные предоставляются «как есть», для общей информации. Мы не гарантируем их точность, полноту или актуальность. Официальная и обязательная информация всегда находится в первоисточнике каждого аукциона, на который мы ссылаемся.</p>
+   <h3>Оценки искусственного интеллекта</h3>
+   <p>Баллы, оценки стоимости, доходность, «возможные причины» и любой автоматически сгенерированный анализ являются <b>исключительно ориентировочными</b>. Это не профессиональная оценка, не инвестиционный, юридический или финансовый совет и не гарантия результата. Это расчёты на основе ограниченных данных, которые могут содержать ошибки.</p>
+   <h3>Ответственность пользователя</h3>
+   <p>Перед любым решением или участием в аукционе вы обязаны самостоятельно проверить каждую деталь и проконсультироваться с лицензированными специалистами (юристом, оценщиком). Любое ваше решение и действие — под вашу исключительную ответственность.</p>
+   <h3>Ограничение ответственности</h3>
+   <p>В максимальной степени, разрешённой законом, мы не несём ответственности за любой ущерб, убытки или расходы, возникшие из-за использования сервиса или доверия к его информации.</p>`,
+   s2h:"2. Политика конфиденциальности (GDPR)",
+   s2:`<p>Мы уважаем ваши персональные данные и соблюдаем Общий регламент по защите данных (GDPR).</p>
+   <h3>Какие данные мы собираем</h3>
+   <ul>
+   <li>Ваш email, если вы подписываетесь на уведомления.</li>
+   <li>Данные, которые вы добровольно предоставляете (имя, email, телефон) при выражении интереса к объекту или обращении к нам.</li>
+   </ul>
+   <h3>Что мы НЕ собираем</h3>
+   <p>Мы не храним имена должников или другие персональные данные третьих лиц из аукционных документов. Мы обрабатываем только данные об объектах (местоположение, цена, характеристики).</p>
+   <h3>Как мы их используем</h3>
+   <p>Мы используем ваши данные исключительно для обслуживания — для отправки запрошенных уведомлений или передачи вашего запроса партнёру-специалисту. Мы не продаём ваши данные.</p>
+   <h3>Ваши права</h3>
+   <p>Вы имеете право на доступ, исправление и удаление ваших данных. По любому запросу пишите на <a href="mailto:info@cyprusauctions.com">info@cyprusauctions.com</a>.</p>`,
+   s3h:"3. Заявление о независимости",
+   s3:`<p>Cyprus Auctions — <b>независимый</b> сервис. Мы не связаны с официальным органом аукционов, банками, управляющими кредитами или государственными органами, не уполномочены и не одобрены ими.</p>
+   <p>Мы не организуем аукционы и не являемся риелторами. Мы работаем исключительно как агрегатор публичной информации, всегда ссылаясь на официальный источник.</p>`,
+   updated:"Последнее обновление: 13/07/2026",
+   foot:"© Cyprus Auctions — Независимый информационный сервис."},
+
+ he:{dir:"rtl",back:"← חזרה למכרזים",
+   title:"תנאים, פרטיות ומשפט",
+   sub:"אנא קראו בעיון לפני השימוש בשירות.",
+   draftNote:"<b>הערה:</b> טקסט זה הוא טיוטה ראשונית ואינו מהווה ייעוץ משפטי. יש לבדוק ולאשר אותו על ידי עורך דין לפני כניסתו לתוקף.",
+   s1h:"1. תנאי שימוש",
+   s1:`<p>Cyprus Auctions הוא שירות מידע עצמאי המרכז ומציג מידע ציבורי על מכרזי נדל״ן בקפריסין, ממקור אתר המכרזים הרשמי.</p>
+   <h3>אופי המידע</h3>
+   <p>כל הנתונים ניתנים "כפי שהם", למידע כללי. איננו מתחייבים לדיוקם, שלמותם או עדכניותם. המידע הרשמי והמחייב נמצא תמיד במקור של כל מכרז, אליו אנו מפנים.</p>
+   <h3>הערכות בינה מלאכותית</h3>
+   <p>ציונים, הערכות שווי, תשואות, "סיבות אפשריות" וכל ניתוח אוטומטי הם <b>אינדיקטיביים בלבד</b>. אינם הערכה מקצועית, ייעוץ השקעות, משפטי או פיננסי, ואינם ערובה לתוצאה. אלה חישובים המבוססים על נתונים מוגבלים ועלולים להכיל שגיאות.</p>
+   <h3>אחריות המשתמש</h3>
+   <p>לפני כל החלטה או השתתפות במכרז, עליכם לאמת באופן עצמאי כל פרט ולהתייעץ עם אנשי מקצוע מורשים (עורך דין, שמאי). כל החלטה ופעולה הן באחריותכם הבלעדית.</p>
+   <h3>הגבלת אחריות</h3>
+   <p>במידה המרבית המותרת בחוק, איננו נושאים באחריות לכל נזק, הפסד או עלות הנובעים מהשימוש בשירות או מהסתמכות על המידע בו.</p>`,
+   s2h:"2. מדיניות פרטיות (GDPR)",
+   s2:`<p>אנו מכבדים את הנתונים האישיים שלכם ופועלים בהתאם לתקנת הגנת המידע הכללית (GDPR).</p>
+   <h3>אילו נתונים אנו אוספים</h3>
+   <ul>
+   <li>האימייל שלכם, אם נרשמתם להתראות.</li>
+   <li>פרטים שאתם מוסרים מרצון (שם, אימייל, טלפון) בעת הבעת עניין בנכס או פנייה אלינו.</li>
+   </ul>
+   <h3>מה אנחנו לא אוספים</h3>
+   <p>איננו שומרים שמות של חייבים או נתונים אישיים של צד שלישי ממסמכי המכרזים. אנו מעבדים רק נתוני נכסים (מיקום, מחיר, מאפיינים).</p>
+   <h3>כיצד אנו משתמשים בהם</h3>
+   <p>אנו משתמשים בפרטים שלכם אך ורק כדי לשרת אתכם — לשלוח התראות שביקשתם או להעביר את בקשתכם לאיש מקצוע שותף. איננו מוכרים את הנתונים שלכם.</p>
+   <h3>הזכויות שלכם</h3>
+   <p>יש לכם זכות לגישה, תיקון ומחיקה של הנתונים שלכם. לכל בקשה, פנו אל <a href="mailto:info@cyprusauctions.com">info@cyprusauctions.com</a>.</p>`,
+   s3h:"3. הצהרת עצמאות",
+   s3:`<p>Cyprus Auctions הוא שירות <b>עצמאי</b>. איננו מסונפים, מורשים או נתמכים על ידי גוף המכרזים הרשמי, בנקים, מנהלי הלוואות או רשויות המדינה.</p>
+   <p>איננו מארגנים מכרזים ואיננו מתווכי נדל״ן. אנו פועלים אך ורק כמרכז מידע ציבורי, תוך הפניה תמיד למקור הרשמי.</p>`,
+   updated:"עודכן לאחרונה: 13/07/2026",
+   foot:"© Cyprus Auctions — שירות מידע עצמאי."},
+};
+
+function apply(){
+  const t = G[LANG];
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = t.dir;
+  const set=(id,v)=>{const el=document.getElementById(id); if(el) el.innerHTML=v;};
+  for(const id of ["back","title","sub","draftNote","s1h","s1","s2h","s2","s3h","s3","updated","foot"])
+    set(id, t[id]);
+  document.querySelectorAll("#langs button").forEach(b=>
+    b.setAttribute("aria-current", b.dataset.l===LANG ? "true":"false"));
+}
+let LANG = (location.search.match(/lang=(el|en|ru|he)/)||[])[1]
+  || (navigator.language||"el").slice(0,2);
+if(!G[LANG]) LANG="el";
+document.getElementById("langs").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  LANG=b.dataset.l; apply();
+});
+apply();
+</script>
+</body>
+</html>
