@@ -62,10 +62,9 @@ def build_payload(page=1, date_from=None):
 
 
 def fetch_page(session, page=1):
-    payload = build_payload(page)
-    r = session.post(SEARCH_URL, json=payload, headers=HEADERS, timeout=TIMEOUT)
-    if r.status_code != 200 or len(r.text.strip()) < 50:
-        r = session.post(SEARCH_URL, data=payload, headers=HEADERS, timeout=TIMEOUT)
+    # Το eauction χρησιμοποιεί GET με παραμέτρους στο URL (επιβεβαιωμένο 16/07/2026)
+    params = {"sortAsc": "True", "sortId": "1", "page": str(page)}
+    r = session.get(LIST_URL, params=params, headers=HEADERS, timeout=TIMEOUT)
     r.raise_for_status()
     return r.text
 
@@ -101,10 +100,8 @@ def parse_date(text):
 
 def parse_listings(html):
     soup = BeautifulSoup(html, "html.parser")
-    cards = soup.select("div[class*=auction], div[class*=result], article")
-    if not cards:
-        cards = [el.parent for el in soup.find_all(string=re.compile("Κωδικ"))]
-
+    # Κάθε ακίνητο = div.AList-BoxContainer (πραγματική δομή eauction, 16/07/2026)
+    cards = soup.select("div.AList-BoxContainer")
     out, seen = [], set()
     for card in cards:
         text = _clean(card.get_text(" ", strip=True)) or ""
@@ -114,12 +111,47 @@ def parse_listings(html):
         code = mcode.group(1)
         seen.add(code)
 
+        # Βοηθητικό: βρίσκει το κείμενο δίπλα σε έναν τίτλο κελιού
+        def cell(title_kw):
+            for t in card.select("div.AList-BoxMainCellTitle"):
+                if title_kw in (t.get_text() or ""):
+                    # Το επόμενο αδερφάκι κρατά την τιμή (BlueBold ή απλό)
+                    sib = t.find_next_sibling("div")
+                    while sib is not None:
+                        val = _clean(sib.get_text(" ", strip=True))
+                        if val:
+                            return val
+                        sib = sib.find_next_sibling("div")
+            return None
+
+        # Regex fallback από όλο το κείμενο (αν αλλάξει η δομή)
         def field(label):
             m = re.search(label + r"\s*:?\s*(.+?)(?:$|"
                           r"Επιφυλασσ|Ημ/νία|Ημερομην|Επαρχ|Δήμος|"
                           r"Είδος|Ενυπόθηκ|Κατάστασ|Μοναδικ|"
                           r"Περισσότερα|Μέρος\s+του)", text)
             return _clean(m.group(1)) if m else None
+
+        # Είδος: ψάξε το BlueBold ΜΕΣΑ στο κελί που έχει τίτλο «Είδος»
+        typ = None
+        for t in card.select("div.AList-BoxMainCellTitle"):
+            if "Είδος" in (t.get_text() or ""):
+                parent = t.parent
+                if parent:
+                    bb = parent.select_one("div.AList-BoxTextBlueBold")
+                    if bb:
+                        typ = _clean(bb.get_text())
+                break
+        typ = typ or cell("Είδος") or field(r"Είδος")
+
+        # Διεύθυνση/Δήμος
+        addr = None
+        ad = card.select_one("div.AList-BoxTextAddress")
+        if ad:
+            addr = _clean(ad.get_text(" ", strip=True))
+
+        district = field(r"Επαρχία")
+        municipality = field(r"Δήμος\s*/\s*Ενορία\s*/\s*Κοινότητα") or addr
 
         link = card.find("a", href=True)
         url = None
@@ -128,21 +160,32 @@ def parse_listings(html):
 
         out.append({
             "code": code,
-            "status": field(r"Κατάστασ(?:η|ης)"),
-            "price": parse_price(field(r"Επιφυλασσόμενη\s+Τιμή") or ""),
-            "auction_date": parse_date(field(r"Ημ/νία\s+Διεξαγωγής") or ""),
-            "district": field(r"Επαρχία"),
-            "municipality": field(r"Δήμος\s*/\s*Ενορία\s*/\s*Κοινότητα"),
-            "type": field(r"Είδος"),
-            "lender": field(r"Ενυπόθηκος\s+Δανειστής"),
+            "status": cell("Κατάσταση") or field(r"Κατάστασ(?:η|ης)"),
+            "price": parse_price(cell("Επιφυλασσόμενη") or field(r"Επιφυλασσόμενη\s+Τιμή") or ""),
+            "auction_date": parse_date(cell("Ημ/νία Διεξαγωγής") or field(r"Ημ/νία\s+Διεξαγωγής") or ""),
+            "district": district,
+            "municipality": municipality,
+            "type": typ,
+            "lender": cell("Ενυπόθηκος") or field(r"Ενυπόθηκος\s+Δανειστής"),
             "url": url or LIST_URL,
         })
     return out
 
 
 def find_total_pages(html):
-    m = re.search(r"[Σσ]ελίδα\s+\d+\s+από\s+(\d+)", html)
-    return int(m.group(1)) if m else 1
+    # Δοκίμασε διάφορες μορφές που μπορεί να έχει το eauction
+    for pat in (r"[Σσ]ελίδα\s+\d+\s+από\s+(\d+)",
+                r"[Σσ]ελίδα\s+\d+\s*/\s*(\d+)",
+                r"page=(\d+)['\"]?\s*>\s*[Ττ]ελευτα"):
+        m = re.search(pat, html)
+        if m:
+            return int(m.group(1))
+    # Αλλιώς υπολόγισε από το πλήθος αποτελεσμάτων (π.χ. "Βρέθηκαν 415")
+    mt = re.search(r"Βρέθηκαν\s+(\d+)\s+πλειστηριασμ", html)
+    if mt:
+        import math
+        return max(1, math.ceil(int(mt.group(1)) / 20))
+    return 1
 
 
 def scrape_all():
