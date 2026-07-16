@@ -39,10 +39,16 @@ TIMEOUT = 30
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/126.0 Safari/537.36",
-    "Accept-Language": "el-GR,el;q=0.9",
-    "X-Requested-With": "XMLHttpRequest",
-    "Referer": LIST_URL,
+                  "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,"
+              "image/webp,*/*;q=0.8",
+    "Accept-Language": "el-GR,el;q=0.9,en;q=0.8",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "same-origin",
+    "Sec-Fetch-User": "?1",
+    "Connection": "keep-alive",
 }
 
 
@@ -64,7 +70,15 @@ def build_payload(page=1, date_from=None):
 def fetch_page(session, page=1):
     # Το eauction χρησιμοποιεί GET με παραμέτρους στο URL (επιβεβαιωμένο 16/07/2026)
     params = {"sortAsc": "True", "sortId": "1", "page": str(page)}
-    r = session.get(LIST_URL, params=params, headers=HEADERS, timeout=TIMEOUT)
+    headers = dict(HEADERS)
+    headers["Referer"] = LIST_URL
+    r = session.get(LIST_URL, params=params, headers=headers, timeout=TIMEOUT)
+    # 428/403/503 = ο server θέλει session/cookies — δοκίμασε ξανά μετά από warm-up
+    if r.status_code in (428, 403, 503):
+        time.sleep(2)
+        session.get(BASE + "/", headers=HEADERS, timeout=TIMEOUT)
+        time.sleep(1)
+        r = session.get(LIST_URL, params=params, headers=headers, timeout=TIMEOUT)
     r.raise_for_status()
     return r.text
 
@@ -190,8 +204,13 @@ def find_total_pages(html):
 
 def scrape_all():
     session = requests.Session()
+    session.headers.update(HEADERS)
+    # Warm-up: επισκέψου πρώτα την αρχική για να πάρεις cookies/session
     try:
+        session.get(BASE + "/", headers=HEADERS, timeout=TIMEOUT)
+        time.sleep(1)
         session.get(LIST_URL, headers=HEADERS, timeout=TIMEOUT)
+        time.sleep(1)
     except Exception:
         pass
     first = fetch_page(session, 1)
